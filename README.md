@@ -32,24 +32,7 @@
 
 ---
 
-## 💖 Thank You for Exploring My Portfolio!
-
-> *"Thank you for taking the time to inspect my software showcase!"* 🌐
-
-Having you explore my portfolio website and review the projects I have poured my passion into is a true honor. As a software engineering student, every line of code represents a commitment to growth, clean architecture, and delightful user experiences.
-
-- 🌟 **Enjoyed exploring my work?** Please leave a star on this repo to show your support!
-- 📬 **Let's Connect & Collaborate:** I am actively seeking engineering roles, internship opportunities, and exciting collaborative projects. Let's connect on [GitHub](https://github.com/SriniwasAwasthi) or get in touch directly.
-
-*Wishing you all the best in your endeavors, and thank you once again for visiting!* ✨
-
----
-
-<div align="center">
-  <sub>Designed and built with pride by <a href="https://github.com/SriniwasAwasthi">Sriniwas Awasthi</a>.</sub>
-</div>
-
-## 🏛️ Portfolio Architecture
+## 🏛️ System Architecture
 
 ```mermaid
 graph TD
@@ -58,3 +41,17 @@ graph TD
     Hub --> GitHubAPI["📡 GitHub GraphQL API (Live Stars & Commits)"]
     Visitor --> MiniGame["🚀 2D Canvas Space Game"]
 ```
+
+---
+
+## 💖 Thank You for Visiting & Exploring 🚀 Sriniwas Awasthi — Personal Engineering Portfolio!
+
+> *"Thank you for taking the time to explore this project! Continuous learning, clean craftsmanship, and solving real-world challenges through elegant software are at the core of my developer journey."* 🚀
+
+* 🌟 **Enjoyed this project?** If you found this repository interesting or helpful, please consider giving it a **Star**!
+* 📬 **Let's Connect & Collaborate:** I am actively seeking engineering opportunities, impactful internships, and open-source collaborations. Feel free to connect via [GitHub](https://github.com/SriniwasAwasthi) or [Email](mailto:sriawasthi164@gmail.com).
+
+---
+<div align="center">
+  <sub>Designed & Crafted with Passion by <a href="https://github.com/SriniwasAwasthi"><strong>Sriniwas Awasthi</strong></a> • Continuous Learner & Software Engineer</sub>
+</div>

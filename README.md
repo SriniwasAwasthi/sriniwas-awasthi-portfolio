@@ -48,3 +48,13 @@ Having you explore my portfolio website and review the projects I have poured my
 <div align="center">
   <sub>Designed and built with pride by <a href="https://github.com/SriniwasAwasthi">Sriniwas Awasthi</a>.</sub>
 </div>
+
+## 🏛️ Portfolio Architecture
+
+```mermaid
+graph TD
+    Visitor["👤 Visitor"] --> Three["🌌 Three.js 3D Interactive Scene"]
+    Visitor --> Hub["💼 Project Showcase Grid"]
+    Hub --> GitHubAPI["📡 GitHub GraphQL API (Live Stars & Commits)"]
+    Visitor --> MiniGame["🚀 2D Canvas Space Game"]
+```

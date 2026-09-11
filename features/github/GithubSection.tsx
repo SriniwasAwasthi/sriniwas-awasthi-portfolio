@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Github, Code, ArrowUpRight, Loader2, RefreshCw } from 'lucide-react';
 import { Reveal } from '@/components/animations/Reveal';
 import { cn } from '@/lib/utils';
+import { fetchLiveGitHubStats } from '@/lib/github';
 
 // Fallback Repositories (if GitHub API rate-limited or offline)
 const fallbackRepos = [
@@ -222,7 +223,8 @@ export function GithubSection() {
     async function fetchLiveRepos() {
       try {
         const response = await fetch(
-          'https://api.github.com/users/SriniwasAwasthi/repos?sort=updated&per_page=100',
+          `https://api.github.com/users/SriniwasAwasthi/repos?sort=updated&per_page=100&_t=${Date.now()}`,
+          { cache: 'no-store' }
         );
         if (!response.ok) throw new Error('GitHub API response error');
         const data = await response.json();
@@ -233,7 +235,7 @@ export function GithubSection() {
             const dateObj = new Date(repo.updated_at || Date.now());
             const formattedDate = `Updated ${dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
 
-            return {\
+            return {
               name: repo.name,
               displayName: repo.name.replace(/[-_]/g, ' '),
               description: repo.description || 'Public GitHub project repository.',
@@ -258,25 +260,15 @@ export function GithubSection() {
 
     async function fetchLiveContributions() {
       try {
-        const res = await fetch('https://github-contributions-api.jogruber.de/v4/SriniwasAwasthi?y=last');
-        if (!res.ok) return;
-        const data = await res.json();
-        let total = 0;
-        if (data && data.total && typeof data.total.lastYear === 'number' && data.total.lastYear > 0) {
-          total = data.total.lastYear;
+        const stats = await fetchLiveGitHubStats();
+        if (stats.totalContributions > 0) {
+          setTotalContributions(stats.totalContributions);
         }
-        if (data && Array.isArray(data.contributions) && data.contributions.length > 0) {
-          const sum = data.contributions.reduce((acc: number, item: { count?: number }) => acc + (item.count || 0), 0);
-          if (sum > total) {
-            total = sum;
-          }
-          const mapped = data.contributions.slice(-364).map((item: { count?: number; level?: number }) => item.count || item.level || 0);
-          if (mapped.length > 0) {
-            setContributions(mapped);
-          }
+        if (stats.contributionsGrid && stats.contributionsGrid.length > 0) {
+          setContributions(stats.contributionsGrid);
         }
-        if (total > 0) {
-          setTotalContributions(total);
+        if (stats.isLive) {
+          setIsLive(true);
         }
       } catch (_err) {
         // Keeps default 269 fallback
@@ -298,12 +290,12 @@ export function GithubSection() {
 
     const total = repos.length || 1;
     return Object.entries(counts)
-      .map(([lang, count]) => ({\
+      .map(([lang, count]) => ({
         lang,
         count,
         percentage: Math.round((count / total) * 100),
         color: langColors[lang] || 'bg-primary',
-        hexColor: langHexColors[lang] || '#39FF14',\
+        hexColor: langHexColors[lang] || '#39FF14',
       }))
       .sort((a, b) => b.count - a.count);
   }, [repos]);
@@ -316,7 +308,7 @@ export function GithubSection() {
     const dashLength = (item.count / totalRepos) * CIRCUMFERENCE;
     const offset = -cumulativeOffset;
     cumulativeOffset += dashLength;
-    return {\
+    return {
       ...item,
       dashLength,
       offset,
@@ -337,12 +329,12 @@ export function GithubSection() {
                 05 // GitHub Live Sync
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#39FF14]/30 bg-[#39FF14]/10 text-[11px] font-mono font-semibold text-[#39FF14]">
-                {isLive ? (\
+                {isLive ? (
                   <>
                     <span className="w-2 h-2 rounded-full bg-[#39FF14] animate-pulse" />
                     <span>GitHub API: Live Synchronized</span>
                   </>
-                ) : (\
+                ) : (
                   <>
                     <RefreshCw className="w-3 h-3 text-[#39FF14]" />
                     <span>Auto-Sync Ready</span>

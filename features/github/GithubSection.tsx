@@ -152,7 +152,7 @@ const langColors: Record<string, string> = {
   'C++': 'bg-purple-600',
 };
 
-// Generate fallback contribution activity matching exact GitHub activity (95 contributions)
+// Generate fallback contribution activity matching exact GitHub activity (269 contributions)
 const generateContributions = () => {
   const list = new Array(364).fill(0);
   list[55] = 1; // Oct 18, 2025
@@ -176,6 +176,12 @@ const generateContributions = () => {
   list[348] = 9; // Aug 7, 2026
   list[350] = 3; // Aug 9, 2026
   list[355] = 5; // Aug 14, 2026
+  list[356] = 1; // Aug 23, 2026
+  list[357] = 31; // Aug 24, 2026
+  list[358] = 5; // Aug 25, 2026
+  list[359] = 95; // Sep 7, 2026
+  list[360] = 36; // Sep 8, 2026
+  list[363] = 14; // Sep 11, 2026
   return list;
 };
 
@@ -206,7 +212,7 @@ const langHexColors: Record<string, string> = {
 
 export function GithubSection() {
   const [contributions, setContributions] = React.useState<number[]>(generateContributions);
-  const [totalContributions, setTotalContributions] = React.useState<number>(95);
+  const [totalContributions, setTotalContributions] = React.useState<number>(269);
   const [repos, setRepos] = React.useState<DisplayRepo[]>(fallbackRepos);
   const [loading, setLoading] = React.useState<boolean>(true);
   const [isLive, setIsLive] = React.useState<boolean>(false);
@@ -227,7 +233,7 @@ export function GithubSection() {
             const dateObj = new Date(repo.updated_at || Date.now());
             const formattedDate = `Updated ${dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
 
-            return {
+            return {\
               name: repo.name,
               displayName: repo.name.replace(/[-_]/g, ' '),
               description: repo.description || 'Public GitHub project repository.',
@@ -255,17 +261,25 @@ export function GithubSection() {
         const res = await fetch('https://github-contributions-api.jogruber.de/v4/SriniwasAwasthi?y=last');
         if (!res.ok) return;
         const data = await res.json();
+        let total = 0;
         if (data && data.total && typeof data.total.lastYear === 'number' && data.total.lastYear > 0) {
-          setTotalContributions(data.total.lastYear);
+          total = data.total.lastYear;
         }
         if (data && Array.isArray(data.contributions) && data.contributions.length > 0) {
+          const sum = data.contributions.reduce((acc: number, item: { count?: number }) => acc + (item.count || 0), 0);
+          if (sum > total) {
+            total = sum;
+          }
           const mapped = data.contributions.slice(-364).map((item: { count?: number; level?: number }) => item.count || item.level || 0);
           if (mapped.length > 0) {
             setContributions(mapped);
           }
         }
+        if (total > 0) {
+          setTotalContributions(total);
+        }
       } catch (_err) {
-        // Keeps default 62 fallback
+        // Keeps default 269 fallback
       }
     }
 
@@ -284,12 +298,12 @@ export function GithubSection() {
 
     const total = repos.length || 1;
     return Object.entries(counts)
-      .map(([lang, count]) => ({
+      .map(([lang, count]) => ({\
         lang,
         count,
         percentage: Math.round((count / total) * 100),
         color: langColors[lang] || 'bg-primary',
-        hexColor: langHexColors[lang] || '#39FF14',
+        hexColor: langHexColors[lang] || '#39FF14',\
       }))
       .sort((a, b) => b.count - a.count);
   }, [repos]);
@@ -302,7 +316,7 @@ export function GithubSection() {
     const dashLength = (item.count / totalRepos) * CIRCUMFERENCE;
     const offset = -cumulativeOffset;
     cumulativeOffset += dashLength;
-    return {
+    return {\
       ...item,
       dashLength,
       offset,
@@ -323,12 +337,12 @@ export function GithubSection() {
                 05 // GitHub Live Sync
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-[#39FF14]/30 bg-[#39FF14]/10 text-[11px] font-mono font-semibold text-[#39FF14]">
-                {isLive ? (
+                {isLive ? (\
                   <>
                     <span className="w-2 h-2 rounded-full bg-[#39FF14] animate-pulse" />
                     <span>GitHub API: Live Synchronized</span>
                   </>
-                ) : (
+                ) : (\
                   <>
                     <RefreshCw className="w-3 h-3 text-[#39FF14]" />
                     <span>Auto-Sync Ready</span>
@@ -408,7 +422,7 @@ export function GithubSection() {
                       {totalContributions} contributions in the last year
                     </span>
                     <span className="text-[11px] text-muted-foreground font-mono">
-                      Aug 2025 – Aug 2026
+                      Aug 2025 – Sep 2026
                     </span>
                   </div>
 

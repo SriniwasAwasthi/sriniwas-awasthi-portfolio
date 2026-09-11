@@ -15,7 +15,7 @@ export function Hero() {
   const [activeTab, setActiveTab] = React.useState<'profile' | 'tech'>('profile');
   const [copied, setCopied] = React.useState(false);
   const [publicReposCount, setPublicReposCount] = React.useState<number>(15);
-  const [contributionsCount, setContributionsCount] = React.useState<number>(95);
+  const [contributionsCount, setContributionsCount] = React.useState<number>(269);
 
   React.useEffect(() => {
     fetch('https://api.github.com/users/SriniwasAwasthi')
@@ -30,8 +30,18 @@ export function Hero() {
     fetch('https://github-contributions-api.jogruber.de/v4/SriniwasAwasthi?y=last')
       .then((res) => res.json())
       .then((data) => {
-        if (data && data.total && typeof data.total.lastYear === 'number') {
-          setContributionsCount(data.total.lastYear);
+        if (data) {
+          let total = 0;
+          if (data.total && typeof data.total.lastYear === 'number') {
+            total = data.total.lastYear;
+          }
+          if (Array.isArray(data.contributions) && data.contributions.length > 0) {
+            const sum = data.contributions.reduce((acc: number, item: { count?: number }) => acc + (item.count || 0), 0);
+            if (sum > total) total = sum;
+          }
+          if (total > 0) {
+            setContributionsCount(total);
+          }
         }
       })
       .catch(() => {});
@@ -166,12 +176,12 @@ export function Hero() {
               className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors duration-200 font-medium border border-border/40 hover:border-border px-2.5 py-1.5 rounded-full cursor-pointer bg-background/30 backdrop-blur-sm"
               aria-label="Copy Email Address"
             >
-              {copied ? (
+              {copied ? (\
                 <>
                   <Check className="w-3.5 h-3.5 text-emerald-500" />
                   <span>Copied!</span>
                 </>
-              ) : (
+              ) : (\
                 <>
                   <Mail className="w-3.5 h-3.5" />
                   <span>Email</span>

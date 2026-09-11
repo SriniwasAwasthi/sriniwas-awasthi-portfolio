@@ -9,39 +9,23 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useMotionPresets } from '@/components/animations/MotionPresets';
 import { siteConfig } from '@/config/site';
 import DecryptedText from '@/components/animations/DecryptedText';
+import { fetchLiveGitHubStats } from '@/lib/github';
 
 export function Hero() {
   const { slideUp, staggerContainer } = useMotionPresets();
   const [activeTab, setActiveTab] = React.useState<'profile' | 'tech'>('profile');
   const [copied, setCopied] = React.useState(false);
-  const [publicReposCount, setPublicReposCount] = React.useState<number>(15);
+  const [publicReposCount, setPublicReposCount] = React.useState<number>(16);
   const [contributionsCount, setContributionsCount] = React.useState<number>(269);
 
   React.useEffect(() => {
-    fetch('https://api.github.com/users/SriniwasAwasthi')
-      .then((res) => res.json())
+    fetchLiveGitHubStats()
       .then((data) => {
-        if (data && typeof data.public_repos === 'number') {
-          setPublicReposCount(data.public_repos);
+        if (data.publicRepos > 0) {
+          setPublicReposCount(data.publicRepos);
         }
-      })
-      .catch(() => {});
-
-    fetch('https://github-contributions-api.jogruber.de/v4/SriniwasAwasthi?y=last')
-      .then((res) => res.json())
-      .then((data) => {
-        if (data) {
-          let total = 0;
-          if (data.total && typeof data.total.lastYear === 'number') {
-            total = data.total.lastYear;
-          }
-          if (Array.isArray(data.contributions) && data.contributions.length > 0) {
-            const sum = data.contributions.reduce((acc: number, item: { count?: number }) => acc + (item.count || 0), 0);
-            if (sum > total) total = sum;
-          }
-          if (total > 0) {
-            setContributionsCount(total);
-          }
+        if (data.totalContributions > 0) {
+          setContributionsCount(data.totalContributions);
         }
       })
       .catch(() => {});
@@ -345,7 +329,9 @@ export function Hero() {
                         </span>,{' '}
                         <span className="text-[#B7FFAE]">&quot;3D Web &amp; Canvas Games&quot;</span>,{'\n'}
                         {'    '}
-                        <span className="text-[#B7FFAE]">&quot;Rapid Full-Stack Prototyping&quot;</span>
+                        <span className="text-[#B7FFAE]">
+                          &quot;Rapid Full-Stack Prototyping&quot;
+                        </span>
                         {'\n'}
                         {'  '}]{'\n'}&#125;
                       </code>

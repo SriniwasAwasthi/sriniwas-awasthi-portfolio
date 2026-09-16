@@ -160,12 +160,12 @@ export function Hero() {
               className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors duration-200 font-medium border border-border/40 hover:border-border px-2.5 py-1.5 rounded-full cursor-pointer bg-background/30 backdrop-blur-sm"
               aria-label="Copy Email Address"
             >
-              {copied ? (\
+              {copied ? (
                 <>
                   <Check className="w-3.5 h-3.5 text-emerald-500" />
                   <span>Copied!</span>
                 </>
-              ) : (\
+              ) : (
                 <>
                   <Mail className="w-3.5 h-3.5" />
                   <span>Email</span>

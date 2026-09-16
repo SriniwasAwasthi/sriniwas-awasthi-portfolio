@@ -62,8 +62,8 @@ export function Navbar() {
         colors={['#39FF14', '#7CFF6B', '#50FA7B']}
       >
         <a
-          href="/SRINIWAS_RESUME.pdf"
-          download
+          href="/SRINIWAS_Resume.pdf"
+          download="Sriniwas_Awasthi_Resume.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className={cn(

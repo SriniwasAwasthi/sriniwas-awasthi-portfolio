@@ -63,7 +63,6 @@ export function Navbar() {
       >
         <a
           href="/SRINIWAS_Resume.pdf"
-          download="Sriniwas_Awasthi_Resume.pdf"
           target="_blank"
           rel="noopener noreferrer"
           className={cn(

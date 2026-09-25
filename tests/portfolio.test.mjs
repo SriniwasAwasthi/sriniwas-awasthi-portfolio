@@ -36,7 +36,13 @@ test('Resume Assets: valid ATS single-page resume PDFs exist in public directory
   const fs = await import('node:fs');
   const path = await import('node:path');
   const publicDir = path.resolve('public');
-  const requiredResumes = ['SRINIWAS_Resume.pdf', 'resume.pdf', 'SRINIWAS_AWASTHI_RESUME.pdf'];
+  const requiredResumes = [
+    'SRINIWAS_Resume.pdf',
+    'Sriniwas_Awasthi_Resume.pdf',
+    'resume.pdf',
+    'SRINIWAS_AWASTHI_RESUME.pdf',
+    'sriniwas-awasthi-resume.pdf',
+  ];
 
   for (const filename of requiredResumes) {
     const fullPath = path.join(publicDir, filename);

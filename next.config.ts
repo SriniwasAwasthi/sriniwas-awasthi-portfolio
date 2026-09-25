@@ -68,6 +68,24 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        // Ensure PDF files are served with correct MIME and inline preview
+        source: '/(.*)\\.pdf',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/pdf',
+          },
+          {
+            key: 'Content-Disposition',
+            value: 'inline',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+        ],
+      },
     ];
   },
 };

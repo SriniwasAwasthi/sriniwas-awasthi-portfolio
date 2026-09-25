@@ -7,7 +7,7 @@ export const siteConfig = {
   ogImage: 'https://sriniwas-awasthi-portfolio.netlify.app/og.png',
   links: {
     github: 'https://github.com/SriniwasAwasthi',
-    linkedin: 'https://www.linkedin.com/in/sriniwas-awasthi210728/',
+    linkedin: 'https://www.linkedin.com/in/sriniwas-awasthi/',
     email: 'mailto:sriawasthi164@gmail.com',
   },
   navItems: [

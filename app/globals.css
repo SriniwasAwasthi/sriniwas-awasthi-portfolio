@@ -183,7 +183,7 @@
     -moz-osx-font-smoothing: grayscale;
   }
   html {
-    scroll-behavior: auto;
+    scroll-behavior: smooth;
   }
 
   /* Scroll margin so fixed navbar doesn't cover anchor targets */
@@ -205,6 +205,20 @@
     background-color: rgba(57, 255, 20, 0.25);
     color: #39ff14;
   }
+}
+
+/* GPU Hardware Acceleration for ultra-smooth scrolling */
+.transform-gpu {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Performance-optimized backdrop blur */
+.backdrop-blur-md,
+.backdrop-blur-sm,
+.backdrop-blur-xl {
+  transform: translateZ(0);
 }
 
 /* Neon Green Glow Utilities */

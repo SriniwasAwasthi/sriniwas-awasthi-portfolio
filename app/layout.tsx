@@ -127,7 +127,7 @@ export default function RootLayout({
                 var target = document.getElementById(hash.slice(1));
                 if (!target) return;
                 e.preventDefault();
-                target.scrollIntoView({ behavior: 'instant', block: 'start' });
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 history.pushState(null, '', hash);
               });
             `,

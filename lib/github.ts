@@ -290,7 +290,7 @@ export function calculateLanguageDistribution(repos: DisplayRepo[]): LanguageSta
  */
 export function buildContributionCalendar(
   rawContributions?: Array<{ date?: string; count?: number; level?: number }>,
-  targetTotal = TARGET_TOTAL_CONTRIBUTIONS
+  targetTotal = TARGET_TOTAL_CONTRIBUTIONS,
 ): {
   days: ContributionDay[];
   monthLabels: MonthLabel[];
@@ -302,7 +302,7 @@ export function buildContributionCalendar(
   if (Array.isArray(rawContributions)) {
     for (const item of rawContributions) {
       if (item && item.date) {
-        const count = typeof item.count === 'number' ? item.count : (item.level ? item.level : 0);
+        const count = typeof item.count === 'number' ? item.count : item.level ? item.level : 0;
         let level = typeof item.level === 'number' ? item.level : 0;
         if (level === 0 && count > 0) {
           level = count >= 20 ? 4 : count >= 10 ? 3 : count >= 4 ? 2 : 1;
@@ -316,8 +316,7 @@ export function buildContributionCalendar(
   for (const [dateStr, baselineCount] of Object.entries(KNOWN_ACTIVE_CONTRIBUTIONS)) {
     const existing = map.get(dateStr);
     if (!existing || existing.count === 0) {
-      const level =
-        baselineCount >= 20 ? 4 : baselineCount >= 10 ? 3 : baselineCount >= 4 ? 2 : 1;
+      const level = baselineCount >= 20 ? 4 : baselineCount >= 10 ? 3 : baselineCount >= 4 ? 2 : 1;
       map.set(dateStr, { count: baselineCount, level });
     }
   }
@@ -401,103 +400,113 @@ export function getFallbackGitHubData(): GitHubSyncData {
   };
 }
 
+let cachedStatsPromise: Promise<GitHubSyncData> | null = null;
+
 /**
- * Fetches real-time GitHub data with multi-provider redundancy.
+ * Fetches real-time GitHub data with multi-provider redundancy and in-memory caching.
  */
 export async function fetchLiveGitHubStats(): Promise<GitHubSyncData> {
-  // Strategy 1: Fetch through our optimized internal Next.js API route
-  try {
-    const apiRes = await fetch(`/api/github?_t=${Date.now()}`, {
-      cache: 'no-store',
-    });
-    if (apiRes.ok) {
-      const data = await apiRes.json();
-      if (data && Array.isArray(data.contributions) && data.contributions.length > 0) {
-        return {
-          totalContributions: data.totalContributions || TARGET_TOTAL_CONTRIBUTIONS,
-          contributions: data.contributions,
-          monthLabels: data.monthLabels || [],
-          publicRepos: data.publicRepos || 18,
-          repos: data.repos || FALLBACK_REPOSITORIES,
-          languageDistribution:
-            data.languageDistribution || calculateLanguageDistribution(FALLBACK_REPOSITORIES),
-          isLive: true,
-        };
-      }
-    }
-  } catch (_e) {
-    // API route unavailable, proceed to client-side direct fallback
+  if (cachedStatsPromise) {
+    return cachedStatsPromise;
   }
 
-  // Strategy 2: Direct client fetch from GitHub public endpoints
-  try {
-    let rawContribs: Array<{ date?: string; count?: number; level?: number }> = [];
-    let publicRepos = 18;
-    let fetchedRepos: DisplayRepo[] = [];
-
-    // Fetch user profile repo count & list
+  cachedStatsPromise = (async () => {
+    // Strategy 1: Fetch through our optimized internal Next.js API route
     try {
-      const reposRes = await fetch(
-        `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100&_t=${Date.now()}`,
-        { cache: 'no-store' }
-      );
-      if (reposRes.ok) {
-        const reposData = await reposRes.json();
-        if (Array.isArray(reposData) && reposData.length > 0) {
-          publicRepos = reposData.length;
-          fetchedRepos = reposData.map((repo: Record<string, any>) => {
-            const lang = repo.language || 'Code';
-            const dateObj = new Date(repo.updated_at || Date.now());
-            const formattedDate = `Updated ${dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
-
-            return {
-              name: repo.name,
-              displayName: repo.name.replace(/[-_]/g, ' '),
-              description: repo.description || 'Public GitHub project repository.',
-              language: lang,
-              langColor: langColors[lang] || 'bg-primary',
-              stars: repo.stargazers_count || 0,
-              forks: repo.forks_count || 0,
-              updated: formattedDate,
-              url: repo.html_url,
-            };
-          });
+      const apiRes = await fetch(`/api/github`, {
+        cache: 'default',
+      });
+      if (apiRes.ok) {
+        const data = await apiRes.json();
+        if (data && Array.isArray(data.contributions) && data.contributions.length > 0) {
+          return {
+            totalContributions: data.totalContributions || TARGET_TOTAL_CONTRIBUTIONS,
+            contributions: data.contributions,
+            monthLabels: data.monthLabels || [],
+            publicRepos: data.publicRepos || 18,
+            repos: data.repos || FALLBACK_REPOSITORIES,
+            languageDistribution:
+              data.languageDistribution || calculateLanguageDistribution(FALLBACK_REPOSITORIES),
+            isLive: true,
+          };
         }
       }
-    } catch (_repoErr) {
-      // Keep fallback repos
+    } catch (_e) {
+      // API route unavailable, proceed to client-side direct fallback
     }
 
-    // Fetch live contributions with y=last for accurate 365/371 days
+    // Strategy 2: Direct client fetch from GitHub public endpoints
     try {
-      const contribRes = await fetch(
-        `https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=last&_t=${Date.now()}`,
-        { cache: 'no-store' }
-      );
-      if (contribRes.ok) {
-        const contribData = await contribRes.json();
-        if (contribData && Array.isArray(contribData.contributions)) {
-          rawContribs = contribData.contributions;
+      let rawContribs: Array<{ date?: string; count?: number; level?: number }> = [];
+      let publicRepos = 18;
+      let fetchedRepos: DisplayRepo[] = [];
+
+      // Fetch user profile repo count & list
+      try {
+        const reposRes = await fetch(
+          `https://api.github.com/users/${GITHUB_USERNAME}/repos?sort=updated&per_page=100&_t=${Date.now()}`,
+          { cache: 'no-store' },
+        );
+        if (reposRes.ok) {
+          const reposData = await reposRes.json();
+          if (Array.isArray(reposData) && reposData.length > 0) {
+            publicRepos = reposData.length;
+            fetchedRepos = reposData.map((repo: Record<string, any>) => {
+              const lang = repo.language || 'Code';
+              const dateObj = new Date(repo.updated_at || Date.now());
+              const formattedDate = `Updated ${dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+
+              return {
+                name: repo.name,
+                displayName: repo.name.replace(/[-_]/g, ' '),
+                description: repo.description || 'Public GitHub project repository.',
+                language: lang,
+                langColor: langColors[lang] || 'bg-primary',
+                stars: repo.stargazers_count || 0,
+                forks: repo.forks_count || 0,
+                updated: formattedDate,
+                url: repo.html_url,
+              };
+            });
+          }
         }
+      } catch (_repoErr) {
+        // Keep fallback repos
       }
-    } catch (_contribErr) {
-      // Keep baseline
+
+      // Fetch live contributions with y=last for accurate 365/371 days
+      try {
+        const contribRes = await fetch(
+          `https://github-contributions-api.jogruber.de/v4/${GITHUB_USERNAME}?y=last&_t=${Date.now()}`,
+          { cache: 'no-store' },
+        );
+        if (contribRes.ok) {
+          const contribData = await contribRes.json();
+          if (contribData && Array.isArray(contribData.contributions)) {
+            rawContribs = contribData.contributions;
+          }
+        }
+      } catch (_contribErr) {
+        // Keep baseline
+      }
+
+      const calendar = buildContributionCalendar(rawContribs, TARGET_TOTAL_CONTRIBUTIONS);
+      const finalRepos = fetchedRepos.length > 0 ? fetchedRepos : FALLBACK_REPOSITORIES;
+      const finalLangDist = calculateLanguageDistribution(finalRepos);
+
+      return {
+        totalContributions: calendar.totalContributions,
+        contributions: calendar.days,
+        monthLabels: calendar.monthLabels,
+        publicRepos: Math.max(publicRepos, finalRepos.length),
+        repos: finalRepos,
+        languageDistribution: finalLangDist,
+        isLive: true,
+      };
+    } catch (_err) {
+      return getFallbackGitHubData();
     }
+  })();
 
-    const calendar = buildContributionCalendar(rawContribs, TARGET_TOTAL_CONTRIBUTIONS);
-    const finalRepos = fetchedRepos.length > 0 ? fetchedRepos : FALLBACK_REPOSITORIES;
-    const finalLangDist = calculateLanguageDistribution(finalRepos);
-
-    return {
-      totalContributions: calendar.totalContributions,
-      contributions: calendar.days,
-      monthLabels: calendar.monthLabels,
-      publicRepos: Math.max(publicRepos, finalRepos.length),
-      repos: finalRepos,
-      languageDistribution: finalLangDist,
-      isLive: true,
-    };
-  } catch (_err) {
-    return getFallbackGitHubData();
-  }
+  return cachedStatsPromise;
 }

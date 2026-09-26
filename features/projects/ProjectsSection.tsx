@@ -22,6 +22,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { projectsData } from '@/content/projects';
+import { fetchLiveGitHubStats } from '@/lib/github';
 
 // Language Color Mapping
 const langColors: Record<string, string> = {
@@ -88,48 +89,29 @@ const staticFallbackProjects: DynamicProject[] = projectsData.map((p, idx) => ({
 
 export function ProjectsSection() {
   const [projects, setProjects] = React.useState<DynamicProject[]>(staticFallbackProjects);
-  const [loading, setLoading] = React.useState<boolean>(true);
-  const [isLive, setIsLive] = React.useState<boolean>(false);
+  const [loading, setLoading] = React.useState<boolean>(false);
+  const [isLive, setIsLive] = React.useState<boolean>(true);
   const [selectedProject, setSelectedProject] = React.useState<DynamicProject | null>(null);
 
-  // Fetch live public repositories dynamically from GitHub REST API on page load
+  // Sync live public repositories gracefully in background
   React.useEffect(() => {
-    async function fetchGitHubRepos() {
+    let isMounted = true;
+
+    async function syncRepos() {
       try {
-        setLoading(true);
-        const response = await fetch(
-          'https://api.github.com/users/SriniwasAwasthi/repos?sort=updated&per_page=100',
-          { cache: 'no-store' },
-        );
-
-        if (!response.ok) throw new Error(`GitHub API HTTP ${response.status}`);
-        const data = await response.json();
-
-        if (Array.isArray(data) && data.length > 0) {
-          // Sort by updated_at (newest updated first)
-          const sortedRepos = data.sort(
-            (a: any, b: any) =>
-              new Date(b.updated_at || 0).getTime() - new Date(a.updated_at || 0).getTime(),
-          );
-
-          const formattedProjects: DynamicProject[] = sortedRepos.map((repo: any, idx: number) => {
+        const data = await fetchLiveGitHubStats();
+        if (isMounted && data.repos && data.repos.length > 0) {
+          const formattedProjects: DynamicProject[] = data.repos.map((repo, idx) => {
             const lang = repo.language || 'TypeScript';
 
-            // Find matching curated project details from content/projects.ts if available
             const matchingCurated = staticFallbackProjects.find(
               (cp) =>
-                cp.githubUrl.toLowerCase() === (repo.html_url || '').toLowerCase() ||
+                cp.githubUrl.toLowerCase() === (repo.url || '').toLowerCase() ||
                 cp.name.toLowerCase().includes(repo.name.toLowerCase()) ||
                 repo.name.toLowerCase().includes(cp.id.toLowerCase()),
             );
 
-            // Construct tech stack tags
             const techList: string[] = [lang];
-            if (repo.topics && Array.isArray(repo.topics)) {
-              repo.topics.forEach((t: string) => {
-                if (t && !techList.includes(t)) techList.push(t);
-              });
-            }
             if (matchingCurated?.tech) {
               matchingCurated.tech.forEach((t) => {
                 if (t && !techList.includes(t)) techList.push(t);
@@ -142,28 +124,26 @@ export function ProjectsSection() {
             return {
               id: repo.name,
               name: repo.name,
-              displayName: matchingCurated
-                ? matchingCurated.displayName
-                : repo.name.replace(/[-_]/g, ' '),
+              displayName: matchingCurated ? matchingCurated.displayName : repo.displayName,
               summary:
                 repo.description ||
                 matchingCurated?.summary ||
                 `Public software repository built with ${lang} and modern developer tooling.`,
               language: lang,
-              langColor: langColors[lang] || 'bg-[#39FF14]',
-              stars: repo.stargazers_count || 0,
-              forks: repo.forks_count || 0,
-              updatedAt: formatDate(repo.updated_at),
-              rawDate: repo.updated_at || new Date().toISOString(),
-              githubUrl: repo.html_url || `https://github.com/SriniwasAwasthi/${repo.name}`,
+              langColor: repo.langColor || langColors[lang] || 'bg-[#39FF14]',
+              stars: repo.stars || 0,
+              forks: repo.forks || 0,
+              updatedAt: repo.updated,
+              rawDate: new Date().toISOString(),
+              githubUrl: repo.url,
               tech: techList,
               coverColor: matchingCurated?.coverColor || coverColors[idx % coverColors.length],
               problem:
                 matchingCurated?.problem ||
-                `Developing robust, maintainable open-source code for ${repo.name.replace(/[-_]/g, ' ')}.`,
+                `Developing robust, maintainable open-source code for ${repo.displayName}.`,
               solution:
                 matchingCurated?.solution ||
-                `Built ${repo.name.replace(/[-_]/g, ' ')} using ${lang} with clean architecture and modular components.`,
+                `Built ${repo.displayName} using ${lang} with clean architecture and modular components.`,
               features: matchingCurated?.features || [
                 `Public GitHub repository built with ${lang}`,
                 `Live source code available on GitHub`,
@@ -171,7 +151,7 @@ export function ProjectsSection() {
               ],
               learnings:
                 matchingCurated?.learnings ||
-                `Building ${repo.name.replace(/[-_]/g, ' ')} provided key experience in ${lang} system design and state management.`,
+                `Building ${repo.displayName} provided key experience in ${lang} system design and state management.`,
               future: matchingCurated?.future || [
                 'Add interactive live demo link',
                 'Expand documentation and test coverage',
@@ -180,17 +160,20 @@ export function ProjectsSection() {
           });
 
           setProjects(formattedProjects);
-          setIsLive(true);
+          setIsLive(data.isLive);
         }
       } catch (_err) {
-        // Fall back gracefully to static fallback if GitHub API rate-limited or offline
-        setIsLive(false);
+        // Fall back gracefully
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     }
 
-    fetchGitHubRepos();
+    syncRepos();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   React.useEffect(() => {

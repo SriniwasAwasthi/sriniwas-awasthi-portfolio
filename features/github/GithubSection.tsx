@@ -198,97 +198,151 @@ export function GithubSection() {
                     </span>
                   </div>
 
-                  {/* Heatmap Graph Outer Scroll */}
-                  <div className="overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-[#39FF14]/20">
-                    <div className="min-w-[660px] p-3 rounded-lg bg-[#0d1117]/80 border border-[#30363d]/50">
-                      {/* Month Labels Row */}
-                      <div className="grid grid-cols-[30px_repeat(53,1fr)] gap-[3px] text-[10px] text-muted-foreground font-mono mb-1.5 select-none">
-                        <div /> {/* Spacer for weekday labels */}
-                        {Array.from({ length: 53 }).map((_, colIdx) => {
-                          const label = monthLabels.find((m) => m.col === colIdx);
-                          return (
-                            <div
-                              key={colIdx}
-                              className="text-left overflow-visible whitespace-nowrap"
-                            >
-                              {label ? label.month : ''}
-                            </div>
-                          );
-                        })}
-                      </div>
-
-                      {/* Main Calendar Grid with Weekday Labels */}
-                      <div className="flex gap-[3px]">
-                        {/* Weekday labels column */}
-                        <div className="flex flex-col justify-between text-[9px] text-muted-foreground font-mono select-none w-[28px] pr-1 py-[1px]">
-                          <span className="h-2.5 leading-none" /> {/* Sun */}
-                          <span className="h-2.5 leading-none">Mon</span>
-                          <span className="h-2.5 leading-none" /> {/* Tue */}
-                          <span className="h-2.5 leading-none">Wed</span>
-                          <span className="h-2.5 leading-none" /> {/* Thu */}
-                          <span className="h-2.5 leading-none">Fri</span>
-                          <span className="h-2.5 leading-none" /> {/* Sat */}
-                        </div>
-
-                        {/* 53 Columns x 7 Rows Contributions Matrix */}
-                        <div className="grid grid-flow-col grid-rows-7 gap-[3px] flex-1">
-                          {contributions.map((day, idx) => (
-                            <div
-                              key={day.date || idx}
-                              className={cn(
-                                'w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-[2px] transition-all duration-200 cursor-pointer relative group',
-                                day.level === 0
-                                  ? 'bg-[#161b22] border border-[#30363d]/30 hover:border-[#39FF14]/50'
-                                  : day.level === 1
-                                    ? 'bg-[#0e4429] hover:bg-[#196127] hover:scale-125 z-0 hover:z-10'
-                                    : day.level === 2
-                                      ? 'bg-[#006d32] hover:bg-[#239a3b] hover:scale-125 z-0 hover:z-10'
-                                      : day.level === 3
-                                        ? 'bg-[#26a641] hover:bg-[#39d353] hover:scale-125 z-0 hover:z-10 shadow-[0_0_4px_#26a641]'
-                                        : 'bg-[#39d353] hover:bg-[#39FF14] hover:scale-125 z-0 hover:z-10 shadow-[0_0_8px_#39FF14]'
-                              )}
-                              title={`${day.count === 0 ? 'No' : day.count} contribution${day.count === 1 ? '' : 's'} on ${day.formattedDate}`}
-                            />
-                          ))}
-                        </div>
-                      </div>
-
-                      {/* Heatmap Footer: Info & Legend */}
-                      <div className="flex items-center justify-between text-[10px] text-muted-foreground pt-3 mt-2 border-t border-[#30363d]/40">
-                        <a
-                          href="https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/managing-contribution-settings-on-your-profile/why-are-my-contributions-not-showing-up-on-my-profile"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:text-[#39FF14] transition-colors"
+                  {/* Heatmap Graph Container - Fits 100% cleanly inside box with zero scrollbar */}
+                  <div className="w-full p-3 sm:p-4 rounded-lg bg-[#0d1117]/90 border border-[#30363d]/60 shadow-inner">
+                    <svg
+                      viewBox="0 0 718 112"
+                      className="w-full h-auto block select-none overflow-visible"
+                      aria-label="GitHub Contribution Heatmap"
+                    >
+                      {/* Month Labels */}
+                      {monthLabels.map((item, idx) => (
+                        <text
+                          key={idx}
+                          x={32 + item.col * 12.8}
+                          y={11}
+                          fontSize="9.5"
+                          fill="#8b949e"
+                          fontFamily="monospace"
+                          textAnchor="start"
                         >
-                          Learn how we count contributions
-                        </a>
+                          {item.month}
+                        </text>
+                      ))}
 
-                        {/* Level Legend */}
-                        <div className="flex items-center gap-1.5 select-none font-mono">
-                          <span>Less</span>
-                          <div
-                            className="w-2.5 h-2.5 rounded-[2px] bg-[#161b22] border border-[#30363d]/30"
-                            title="No contributions"
-                          />
-                          <div
-                            className="w-2.5 h-2.5 rounded-[2px] bg-[#0e4429]"
-                            title="1-3 contributions"
-                          />
-                          <div
-                            className="w-2.5 h-2.5 rounded-[2px] bg-[#006d32]"
-                            title="4-9 contributions"
-                          />
-                          <div
-                            className="w-2.5 h-2.5 rounded-[2px] bg-[#26a641] shadow-[0_0_4px_#26a641]"
-                            title="10-19 contributions"
-                          />
-                          <div
-                            className="w-2.5 h-2.5 rounded-[2px] bg-[#39d353] shadow-[0_0_6px_#39FF14]"
-                            title="20+ contributions"
-                          />
-                          <span>More</span>
-                        </div>
+                      {/* Weekday Labels */}
+                      <text
+                        x={24}
+                        y={39}
+                        fontSize="9"
+                        fill="#8b949e"
+                        fontFamily="monospace"
+                        textAnchor="end"
+                      >
+                        Mon
+                      </text>
+                      <text
+                        x={24}
+                        y={64.5}
+                        fontSize="9"
+                        fill="#8b949e"
+                        fontFamily="monospace"
+                        textAnchor="end"
+                      >
+                        Wed
+                      </text>
+                      <text
+                        x={24}
+                        y={90}
+                        fontSize="9"
+                        fill="#8b949e"
+                        fontFamily="monospace"
+                        textAnchor="end"
+                      >
+                        Fri
+                      </text>
+
+                      {/* Contribution Day Cells (53 weeks x 7 days) */}
+                      {contributions.map((day, idx) => {
+                        const x = 32 + day.col * 12.8;
+                        const y = 20 + day.row * 12.8;
+
+                        let fill = '#161b22';
+                        let stroke = '#30363d';
+                        let strokeWidth = 0.6;
+                        let strokeOpacity = 0.4;
+
+                        if (day.level === 1) {
+                          fill = '#0e4429';
+                          stroke = '#006d32';
+                          strokeWidth = 0.5;
+                          strokeOpacity = 0.6;
+                        } else if (day.level === 2) {
+                          fill = '#006d32';
+                          stroke = '#26a641';
+                          strokeWidth = 0.5;
+                          strokeOpacity = 0.8;
+                        } else if (day.level === 3) {
+                          fill = '#26a641';
+                          stroke = '#39d353';
+                          strokeWidth = 0.6;
+                          strokeOpacity = 1;
+                        } else if (day.level === 4) {
+                          fill = '#39d353';
+                          stroke = '#39FF14';
+                          strokeWidth = 0.8;
+                          strokeOpacity = 1;
+                        }
+
+                        return (
+                          <rect
+                            key={day.date || idx}
+                            x={x}
+                            y={y}
+                            width={10}
+                            height={10}
+                            rx={2}
+                            ry={2}
+                            fill={fill}
+                            stroke={stroke}
+                            strokeWidth={strokeWidth}
+                            strokeOpacity={strokeOpacity}
+                            className="cursor-pointer transition-all duration-150 hover:stroke-[#39FF14] hover:stroke-[1.5] hover:brightness-125"
+                          >
+                            <title>
+                              {day.count === 0 ? 'No' : day.count} contribution
+                              {day.count === 1 ? '' : 's'} on {day.formattedDate}
+                            </title>
+                          </rect>
+                        );
+                      })}
+                    </svg>
+
+                    {/* Heatmap Footer: Info & Legend */}
+                    <div className="flex items-center justify-between text-[10px] text-muted-foreground pt-3 mt-2 border-t border-[#30363d]/40">
+                      <a
+                        href="https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-github-profile/managing-contribution-settings-on-your-profile/why-are-my-contributions-not-showing-up-on-my-profile"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hover:text-[#39FF14] transition-colors"
+                      >
+                        Learn how we count contributions
+                      </a>
+
+                      {/* Level Legend */}
+                      <div className="flex items-center gap-1.5 select-none font-mono">
+                        <span>Less</span>
+                        <div
+                          className="w-2.5 h-2.5 rounded-[2px] bg-[#161b22] border border-[#30363d]/40"
+                          title="No contributions"
+                        />
+                        <div
+                          className="w-2.5 h-2.5 rounded-[2px] bg-[#0e4429] border border-[#006d32]/50"
+                          title="1-3 contributions"
+                        />
+                        <div
+                          className="w-2.5 h-2.5 rounded-[2px] bg-[#006d32]"
+                          title="4-9 contributions"
+                        />
+                        <div
+                          className="w-2.5 h-2.5 rounded-[2px] bg-[#26a641] shadow-[0_0_4px_#26a641]"
+                          title="10-19 contributions"
+                        />
+                        <div
+                          className="w-2.5 h-2.5 rounded-[2px] bg-[#39d353] shadow-[0_0_6px_#39FF14]"
+                          title="20+ contributions"
+                        />
+                        <span>More</span>
                       </div>
                     </div>
                   </div>

@@ -12,29 +12,62 @@ export function Navbar() {
   const [activeSection, setActiveSection] = React.useState('#home');
 
   React.useEffect(() => {
-    const sections = ['home', 'about', 'projects', 'skills', 'contact'];
+    const sectionIds = ['home', 'about', 'skills', 'projects', 'github', 'contact'];
 
-    // Intersection Observer to track active section while scrolling
-    const observerOptions = {
-      root: null,
-      rootMargin: '-30% 0px -60% 0px',
-      threshold: 0,
+    let rafId: number | null = null;
+
+    const updateActiveSection = () => {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      // If at the very top of the page, activate home
+      if (scrollY < 120) {
+        setActiveSection('#home');
+        return;
+      }
+
+      // If at the bottom of the page, activate contact
+      if (scrollY + windowHeight >= documentHeight - 60) {
+        setActiveSection('#contact');
+        return;
+      }
+
+      // Determine which section is currently at/above the viewport threshold (160px from top)
+      let currentSection = '#home';
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          // If the top of the section has reached or passed 160px from top
+          if (rect.top <= 160) {
+            currentSection = `#${id}`;
+          }
+        }
+      }
+
+      setActiveSection(currentSection);
     };
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(`#${entry.target.id}`);
-        }
+    const handleScroll = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        updateActiveSection();
+        rafId = null;
       });
-    }, observerOptions);
+    };
 
-    sections.forEach((id) => {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    });
+    // Initial check
+    updateActiveSection();
 
-    return () => observer.disconnect();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   const logoNode = (

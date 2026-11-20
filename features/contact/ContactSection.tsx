@@ -46,7 +46,7 @@ export function ContactSection() {
     setSubmittedName(formData.name.trim());
 
     try {
-      // Encode form data for Netlify Forms POST to '/'
+      // Encode form data for Netlify Forms POST to '/__forms.html'
       const encoded = new URLSearchParams({
         'form-name': 'contact',
         name: formData.name,
@@ -55,7 +55,7 @@ export function ContactSection() {
         message: formData.message,
       }).toString();
 
-      const res = await fetch('/', {
+      const res = await fetch('/__forms.html', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: encoded,

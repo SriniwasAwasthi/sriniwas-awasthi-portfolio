@@ -7,20 +7,23 @@ import { cn } from '@/lib/utils';
 import { Reveal } from '@/components/animations/Reveal';
 import { siteConfig } from '@/config/site';
 
+const INITIAL_FORM_DATA = {
+  name: '',
+  email: '',
+  subject: '',
+  message: '',
+  'bot-field': '',
+};
+
 export function ContactSection() {
+  const formRef = React.useRef<HTMLFormElement>(null);
   const [copied, setCopied] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
   const [submittedName, setSubmittedName] = React.useState('');
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
-  const [formData, setFormData] = React.useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-    'bot-field': '',
-  });
+  const [formData, setFormData] = React.useState(INITIAL_FORM_DATA);
 
   const emailAddress = siteConfig.links.email.replace('mailto:', '');
 
@@ -43,7 +46,7 @@ export function ContactSection() {
     setSubmittedName(formData.name.trim());
 
     try {
-      // Encode form data for Netlify Forms POST
+      // Encode form data for Netlify Forms POST to '/'
       const encoded = new URLSearchParams({
         'form-name': 'contact',
         name: formData.name,
@@ -52,7 +55,7 @@ export function ContactSection() {
         message: formData.message,
       }).toString();
 
-      const res = await fetch('/__forms.html', {
+      const res = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: encoded,
@@ -60,13 +63,16 @@ export function ContactSection() {
 
       if (res.ok) {
         setSubmitted(true);
-        setFormData({ name: '', email: '', subject: '', message: '', 'bot-field': '' });
+        setFormData(INITIAL_FORM_DATA);
+        if (formRef.current) formRef.current.reset();
       } else {
         throw new Error('Network response was not ok');
       }
     } catch (_err) {
       // Fallback: If running locally without Netlify server handling, show success state gracefully
       setSubmitted(true);
+      setFormData(INITIAL_FORM_DATA);
+      if (formRef.current) formRef.current.reset();
     } finally {
       setIsSubmitting(false);
     }
@@ -209,6 +215,8 @@ export function ContactSection() {
                       onClick={() => {
                         setSubmitted(false);
                         setSubmittedName('');
+                        setFormData(INITIAL_FORM_DATA);
+                        if (formRef.current) formRef.current.reset();
                       }}
                       className="mt-2 px-6 py-2.5 rounded-full text-xs font-mono font-semibold border border-[#39FF14]/40 hover:border-[#39FF14] text-[#39FF14] hover:bg-[#39FF14]/10 transition-all cursor-pointer shadow-[0_0_15px_rgba(57,255,20,0.1)]"
                     >
@@ -217,8 +225,10 @@ export function ContactSection() {
                   </div>
                 ) : (
                   <form
+                    ref={formRef}
                     name="contact"
                     method="POST"
+                    autoComplete="off"
                     onSubmit={handleSubmit}
                     className="space-y-4"
                   >

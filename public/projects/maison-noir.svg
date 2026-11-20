@@ -1,0 +1,59 @@
+<svg width="800" height="450" viewBox="0 0 800 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="450" rx="16" fill="#060806"/>
+  <rect x="1" y="1" width="798" height="448" rx="15" stroke="#39FF14" stroke-width="1.5" stroke-opacity="0.3"/>
+  
+  <!-- Window Header -->
+  <rect width="800" height="40" rx="16" fill="#0d140d"/>
+  <circle cx="30" cy="20" r="5" fill="#EF4444"/>
+  <circle cx="48" cy="20" r="5" fill="#F59E0B"/>
+  <circle cx="66" cy="20" r="5" fill="#10B981"/>
+  <text x="400" y="24" fill="#39FF14" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle" letter-spacing="1">MAISON NOIR // HIGH-FIDELITY WEB AUDIO &amp; REACT 19 CONCURRENT UI</text>
+
+  <!-- Left: Luxury Storefront Wireframe -->
+  <rect x="30" y="60" width="460" height="360" rx="10" fill="#0a100a" stroke="#39FF14" stroke-width="1" stroke-opacity="0.25"/>
+  <text x="50" y="90" fill="#ffffff" font-family="serif" font-size="20" font-weight="bold">MAISON NOIR</text>
+  <text x="210" y="88" fill="#39FF14" font-family="monospace" font-size="10">SPECIALTY COFFEEHOUSE &amp; SOMMELIER</text>
+
+  <!-- Product Grid Item -->
+  <rect x="50" y="115" width="190" height="200" rx="8" fill="#111a11" stroke="#39FF14" stroke-width="0.8" stroke-opacity="0.3"/>
+  <circle cx="145" cy="180" r="45" fill="#1c2b1c" stroke="#39FF14" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="145" y="185" fill="#39FF14" font-family="monospace" font-size="24" text-anchor="middle">☕</text>
+  <text x="65" y="255" fill="#ffffff" font-family="sans-serif" font-size="12" font-weight="bold">Ethiopian Yirgacheffe</text>
+  <text x="65" y="275" fill="#39FF14" font-family="monospace" font-size="11">$34.00 USD / ¥5,200 JPY</text>
+  <rect x="65" y="285" width="160" height="20" rx="4" fill="#39FF14" fill-opacity="0.15" stroke="#39FF14" stroke-width="0.8"/>
+  <text x="145" y="299" fill="#39FF14" font-family="monospace" font-size="9" text-anchor="middle" font-weight="bold">ADD TO TASTING CART</text>
+
+  <rect x="260" y="115" width="210" height="200" rx="8" fill="#111a11" stroke="#39FF14" stroke-width="0.8" stroke-opacity="0.3"/>
+  <text x="275" y="140" fill="#39FF14" font-family="monospace" font-size="11" font-weight="bold">MULTI-CURRENCY STORE ENGINE</text>
+  <text x="275" y="165" fill="#889988" font-family="monospace" font-size="10">• Memoized cart re-computation</text>
+  <text x="275" y="185" fill="#889988" font-family="monospace" font-size="10">• Real-time FX exchange rate cache</text>
+  <text x="275" y="205" fill="#889988" font-family="monospace" font-size="10">• React 19 Concurrent Mode</text>
+  <text x="275" y="225" fill="#889988" font-family="monospace" font-size="10">• Tailwind CSS v4 tokenized styling</text>
+  <text x="275" y="255" fill="#ffffff" font-family="monospace" font-size="11">Active Currency: <tspan fill="#39FF14">USD ($)</tspan></text>
+  <text x="275" y="275" fill="#ffffff" font-family="monospace" font-size="11">Subtotal Latency: <tspan fill="#39FF14">&lt;8ms</tspan></text>
+
+  <!-- Right: Web Audio API Graph Visualizer -->
+  <rect x="510" y="60" width="260" height="360" rx="10" fill="#0a100a" stroke="#39FF14" stroke-width="1" stroke-opacity="0.25"/>
+  <text x="525" y="90" fill="#39FF14" font-family="monospace" font-size="11" font-weight="bold">WEB AUDIO NODE GRAPH</text>
+
+  <!-- Audio Nodes Diagram -->
+  <rect x="530" y="115" width="220" height="40" rx="6" fill="#142214" stroke="#39FF14" stroke-width="1"/>
+  <text x="640" y="140" fill="#ffffff" font-family="monospace" font-size="11" text-anchor="middle">Vinyl Noise BufferSource</text>
+  
+  <line x1="640" y1="155" x2="640" y2="185" stroke="#39FF14" stroke-width="2" stroke-dasharray="3 3"/>
+
+  <rect x="530" y="185" width="220" height="40" rx="6" fill="#142214" stroke="#39FF14" stroke-width="1"/>
+  <text x="640" y="210" fill="#ffffff" font-family="monospace" font-size="11" text-anchor="middle">BiquadFilterNode [Lowpass]</text>
+
+  <line x1="640" y1="225" x2="640" y2="255" stroke="#39FF14" stroke-width="2" stroke-dasharray="3 3"/>
+
+  <rect x="530" y="255" width="220" height="40" rx="6" fill="#142214" stroke="#39FF14" stroke-width="1"/>
+  <text x="640" y="280" fill="#ffffff" font-family="monospace" font-size="11" text-anchor="middle">GainNode [Master Fader]</text>
+
+  <line x1="640" y1="295" x2="640" y2="325" stroke="#39FF14" stroke-width="2"/>
+
+  <rect x="530" y="325" width="220" height="40" rx="6" fill="#060906" stroke="#39FF14" stroke-width="1.5"/>
+  <text x="640" y="350" fill="#39FF14" font-family="monospace" font-size="11" font-weight="bold" text-anchor="middle">AudioDestination (Speakers)</text>
+
+  <text x="525" y="395" fill="#39FF14" font-family="monospace" font-size="10">SYNTHESIS: 60 FPS WITHOUT JANK</text>
+</svg>

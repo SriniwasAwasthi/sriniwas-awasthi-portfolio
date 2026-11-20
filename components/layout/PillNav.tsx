@@ -256,7 +256,7 @@ const PillNav = ({
           <Link
             className="pill-logo"
             href={items[0].href}
-            aria-label="Home"
+            aria-label="Sriniwas Awasthi - Home"
             onMouseEnter={handleLogoEnter}
             role="menuitem"
             ref={(el) => {
@@ -269,7 +269,7 @@ const PillNav = ({
           <a
             className="pill-logo"
             href={items?.[0]?.href || '#'}
-            aria-label="Home"
+            aria-label="Sriniwas Awasthi - Home"
             onMouseEnter={handleLogoEnter}
             ref={(el) => {
               logoRef.current = el;

@@ -60,8 +60,9 @@ export const langColors: Record<string, string> = {
   CSS: 'bg-sky-400',
   C: 'bg-indigo-500',
   'C++': 'bg-purple-600',
+  'Markdown / Docs': 'bg-cyan-400',
   Code: 'bg-[#39FF14]',
-  Other: 'bg-primary',
+  Other: 'bg-slate-400',
 };
 
 export const langHexColors: Record<string, string> = {
@@ -73,8 +74,9 @@ export const langHexColors: Record<string, string> = {
   CSS: '#38bdf8',
   C: '#6366f1',
   'C++': '#9333ea',
+  'Markdown / Docs': '#22d3ee',
   Code: '#39FF14',
-  Other: '#a855f7',
+  Other: '#94a3b8',
 };
 
 // Known active contribution baseline across 2025-2026 ensuring exactly 329 contributions
@@ -452,7 +454,11 @@ export async function fetchLiveGitHubStats(): Promise<GitHubSyncData> {
           if (Array.isArray(reposData) && reposData.length > 0) {
             publicRepos = reposData.length;
             fetchedRepos = reposData.map((repo: Record<string, any>) => {
-              const lang = repo.language || 'Code';
+              const lang =
+                repo.language ||
+                (repo.name.toLowerCase() === GITHUB_USERNAME.toLowerCase()
+                  ? 'Markdown / Docs'
+                  : 'Other');
               const dateObj = new Date(repo.updated_at || Date.now());
               const formattedDate = `Updated ${dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
 

@@ -47,18 +47,17 @@ export function AIEcosystem() {
         {/* Section Header */}
         <Reveal delay={0.1}>
           <div className="flex flex-col mb-16">
-            <span className="text-xs font-bold tracking-widest text-primary uppercase font-mono mb-2">
-              03 // AI Exploration
+            <span className="text-xs font-bold tracking-widest text-[#39FF14] uppercase font-mono mb-2 neon-text-glow">
+              03 // Applied AI Workflows
             </span>
             <div className="flex items-center gap-4">
               <h2 className="text-3xl md:text-4xl font-heading font-extrabold tracking-tight">
-                Artificial Intelligence
+                Applied AI &amp; Intelligent Workflows
               </h2>
-              <div className="h-[1px] bg-border flex-grow max-w-[200px] hidden sm:block" />
+              <div className="h-[1px] bg-[#39FF14]/20 flex-grow max-w-[200px] hidden sm:block" />
             </div>
-            <p className="text-sm text-muted-foreground max-w-2xl mt-4 leading-relaxed">
-              I see AI as a tool that enhances creativity and accelerates development—not as a
-              replacement for engineering thinking.
+            <p className="text-sm text-muted-foreground max-w-2xl mt-4 leading-relaxed font-sans">
+              Focusing on applied AI engineering: structured JSON-Schema RPC contracts, streaming SSE pipelines, and automated tool integrations that enhance developer and user workflows.
             </p>
           </div>
         </Reveal>
@@ -117,43 +116,6 @@ export function AIEcosystem() {
             );
           })}
         </div>
-
-        {/* Visual Lab Demo Widget (Abstract Terminal) */}
-        <Reveal delay={0.4}>
-          <div className="mt-12 border border-border/60 bg-card/30 rounded-xl overflow-hidden shadow-xl max-w-3xl mx-auto">
-            <div className="flex items-center justify-between px-4 py-2.5 bg-secondary/40 border-b border-border/80">
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
-                <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-              </div>
-              <span className="text-[10px] font-mono text-muted-foreground flex items-center gap-1">
-                <Terminal className="w-3 h-3" />
-                agent-workflow.log
-              </span>
-              <div className="w-8" />
-            </div>
-            <div className="p-4 font-mono text-[10px] sm:text-xs text-foreground/80 space-y-2.5 bg-card/50 max-h-56 overflow-y-auto">
-              <p className="text-muted-foreground">
-                [2026-07-16 13:29:16] INFO: Initializing intelligent agent workflow...
-              </p>
-              <p className="text-indigo-400">
-                [Agent] Task: &quot;Automated code review and refactoring&quot;
-              </p>
-              <p className="text-emerald-400">
-                [Tool] Calling: &quot;analyze_codebase&quot; in ./features
-              </p>
-              <p className="text-emerald-400">
-                [Tool] Response: 8 modules analyzed, 3 optimization suggestions
-              </p>
-              <p className="text-indigo-400">[Agent] Applying structured improvements...</p>
-              <div className="flex items-center gap-1.5 text-primary text-[11px] font-semibold animate-pulse pt-1">
-                <Eye className="w-3.5 h-3.5" />
-                <span>Running optimization loop...</span>
-              </div>
-            </div>
-          </div>
-        </Reveal>
       </div>
     </section>
   );

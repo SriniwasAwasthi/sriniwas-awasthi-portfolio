@@ -66,7 +66,7 @@ export default function NotFound() {
 
         {/* Footer tag */}
         <p className="text-[11px] font-mono text-muted-foreground/40 mt-4">
-          Sriniwas · srinivas-portfolio.vercel.app
+          Sriniwas Awasthi · sriniwas-awasthi-portfolio.netlify.app
         </p>
       </div>
     </div>

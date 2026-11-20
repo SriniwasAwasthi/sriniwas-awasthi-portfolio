@@ -1,11 +1,40 @@
 'use client';
 
 import * as React from 'react';
-import { StoryCard } from './StoryCard';
-import { LearningMilestones } from './LearningMilestones';
-import { QuoteCallout } from './QuoteCallout';
+import Image from 'next/image';
 import { Reveal } from '@/components/animations/Reveal';
-import { BookOpen, Code2, Brain, Target, Cpu } from 'lucide-react';
+import { Cpu, Code2, ShieldCheck, Terminal, GitBranch, ArrowUpRight } from 'lucide-react';
+
+const engineeringPillars = [
+  {
+    title: 'Concurrency & Audio DSP',
+    description:
+      'Designing non-blocking async pipelines, Web Audio API DSP synthesis, and concurrent React 19 UI state machines without frame drops.',
+    metric: '60 FPS UI · <420ms Latency',
+    icon: Cpu,
+  },
+  {
+    title: 'Algorithmic Problem Solving',
+    description:
+      'Designing algorithmic solutions in Java and C++ with strict asymptotic Big-O bounds, invariant verification, and optimal space complexity.',
+    metric: 'Asymptotic Big-O Bounds',
+    icon: Code2,
+  },
+  {
+    title: 'Defensive Architecture & Contracts',
+    description:
+      'Zero loose "any" types, explicit Zod runtime schema boundaries, and normalized relational SQLite/PostgreSQL database schemas.',
+    metric: 'Strict Types · Validated RPC',
+    icon: ShieldCheck,
+  },
+  {
+    title: 'CI/CD & Automated Verification',
+    description:
+      'Unit testing suites, pre-commit hygiene with Husky and lint-staged, and automated GitHub Actions verification workflows before merging.',
+    metric: 'Automated CI Gates · Test-Driven',
+    icon: Terminal,
+  },
+];
 
 export function AboutSection() {
   return (
@@ -18,98 +47,123 @@ export function AboutSection() {
         <Reveal delay={0.1}>
           <div className="flex flex-col mb-16">
             <span className="text-xs font-bold tracking-widest text-[#39FF14] uppercase font-mono mb-2 neon-text-glow">
-              01 // Profile &amp; Brand
+              01 // Engineering Profile
             </span>
             <div className="flex items-center gap-4">
               <h2 className="text-3xl md:text-4xl font-heading font-extrabold tracking-tight">
-                Who I Am
+                Engineering Discipline &amp; Systems
               </h2>
               <div className="h-[1px] bg-[#39FF14]/20 flex-grow max-w-[200px] hidden sm:block" />
             </div>
           </div>
         </Reveal>
 
-        {/* Narrative Grid */}
+        {/* Narrative & Profile Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          {/* Left Column */}
-          <div className="lg:col-span-6 space-y-8">
+          {/* Left Column: Crisp Profile & Avatar */}
+          <div className="lg:col-span-5 space-y-8">
             <Reveal delay={0.15}>
-              <div className="prose prose-neutral dark:prose-invert max-w-none">
-                <h3 className="text-xl font-heading font-bold text-foreground mb-4">
-                  Built 10+ modern web applications using Next.js 15, TypeScript, and Gemini AI
-                </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-                  I am a Full-Stack Software Engineer &amp; AI Systems Developer pursuing Computer Science Engineering at PDA College of Engineering (Kalaburagi). I specialize in solving complex problems, writing clean code, and building high-performance products that combine AI workflows, modern web UI, and reliable databases.
+              <div className="p-6 md:p-8 rounded-2xl border border-[#39FF14]/30 bg-[#060806]/80 backdrop-blur-md shadow-[0_0_30px_rgba(57,255,20,0.08)] relative overflow-hidden">
+                <div className="flex flex-col sm:flex-row items-center gap-6 mb-6">
+                  <div className="relative w-28 h-28 shrink-0 rounded-2xl overflow-hidden border-2 border-[#39FF14] shadow-[0_0_20px_rgba(57,255,20,0.3)] bg-[#030503]">
+                    <Image
+                      src="/sriniwas-awasthi.jpeg"
+                      alt="Sriniwas Awasthi - Software Engineer"
+                      width={112}
+                      height={112}
+                      priority
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-heading font-extrabold text-foreground">
+                      Sriniwas Awasthi
+                    </h3>
+                    <p className="text-xs font-mono text-[#39FF14] mt-1 font-bold">
+                      Full-Stack Software Engineer
+                    </p>
+                    <p className="text-[11px] text-muted-foreground mt-1">
+                      P.D.A College of Engineering, Kalaburagi
+                    </p>
+                  </div>
+                </div>
+
+                {/* The 3-Sentence Engineering Profile */}
+                <p className="text-sm text-foreground/90 leading-relaxed font-sans mb-4">
+                  I am a Full-Stack Software Engineer building high-performance web systems, Java &amp; C++ algorithmic tools, and applied AI workflows.
                 </p>
+                <p className="text-sm text-muted-foreground leading-relaxed font-sans mb-4">
+                  Currently pursuing Computer Science &amp; Engineering at P.D.A College of Engineering, my technical focus centers on concurrent UI state, audio DSP filtering, and relational database integrity.
+                </p>
+                <p className="text-sm text-muted-foreground leading-relaxed font-sans">
+                  When not architecting web platforms, I solve daily competitive programming problems with verified test suites and strict asymptotic guarantees.
+                </p>
+
+                <div className="mt-6 pt-6 border-t border-[#39FF14]/20 flex items-center justify-between text-xs font-mono">
+                  <span className="text-muted-foreground">Algorithmic Problem Solving</span>
+                  <a
+                    href="https://github.com/SriniwasAwasthi/java-dsa-tracker"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[#39FF14] hover:underline flex items-center gap-1 font-bold"
+                  >
+                    View Solutions <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
-            </Reveal>
-
-            {/* What Drives Me */}
-            <Reveal delay={0.25}>
-              <StoryCard
-                category="What Drives Me"
-                title="Curiosity became a career."
-                description="Computer Science gives me the freedom to understand how technology works and the ability to create it. Every concept I learn becomes another tool for solving meaningful problems."
-                icon={Cpu}
-              />
-            </Reveal>
-
-            {/* Engineering Philosophy */}
-            <Reveal delay={0.35}>
-              <StoryCard
-                category="Engineering Philosophy"
-                title="Where ideas become reality."
-                description="Software engineering allows me to transform ideas into products people can use. I believe great software is defined by clarity, reliability, and attention to detail—not complexity."
-                icon={Code2}
-              />
-            </Reveal>
-
-            {/* Vision */}
-            <Reveal delay={0.45}>
-              <StoryCard
-                category="Vision"
-                title="Building for the future."
-                description="My goal is to become a software engineer who creates scalable products, solves meaningful challenges, and never stops learning. I want my work to deliver lasting value through thoughtful engineering."
-                icon={Target}
-              />
             </Reveal>
           </div>
 
-          {/* Right Column */}
-          <div className="lg:col-span-6 space-y-8">
-            {/* AI Exploration */}
+          {/* Right Column: 4 Real Engineering Pillars */}
+          <div className="lg:col-span-7 space-y-6">
             <Reveal delay={0.2}>
-              <StoryCard
-                category="AI Exploration"
-                title="Engineering the next generation."
-                description="Artificial Intelligence is changing the way software is designed and experienced. I'm exploring how intelligent systems can automate workflows, improve decision-making, and create better user experiences."
-                icon={Brain}
-              />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                {engineeringPillars.map((pillar, idx) => {
+                  const Icon = pillar.icon;
+                  return (
+                    <div
+                      key={pillar.title}
+                      className="p-6 rounded-2xl border border-[#39FF14]/20 bg-[#060806]/90 backdrop-blur-md hover:border-[#39FF14]/60 transition-all duration-300 shadow-[0_0_20px_rgba(57,255,20,0.05)] flex flex-col justify-between group"
+                    >
+                      <div>
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="p-3 rounded-xl bg-[#39FF14]/10 text-[#39FF14] border border-[#39FF14]/30 group-hover:scale-110 transition-transform duration-300">
+                            <Icon className="w-5 h-5" />
+                          </div>
+                          <span className="text-[10px] font-mono text-[#39FF14] bg-[#39FF14]/10 px-2 py-0.5 rounded border border-[#39FF14]/20 font-bold">
+                            0{idx + 1}
+                          </span>
+                        </div>
+                        <h3 className="font-heading font-extrabold text-base text-foreground mb-2 group-hover:text-[#39FF14] transition-colors">
+                          {pillar.title}
+                        </h3>
+                        <p className="text-xs text-muted-foreground leading-relaxed font-sans mb-4">
+                          {pillar.description}
+                        </p>
+                      </div>
+
+                      <div className="pt-3 border-t border-[#39FF14]/20 flex items-center justify-between text-[11px] font-mono text-[#39FF14]">
+                        <span>Metric:</span>
+                        <span className="font-bold">{pillar.metric}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </Reveal>
 
-            {/* Beyond Code */}
-            <Reveal delay={0.3}>
-              <StoryCard
-                category="Beyond Code"
-                title="Learn. Build. Improve. Repeat."
-                description="Every project teaches something new. I believe consistent practice, curiosity, and continuous improvement are the foundations of long-term growth."
-                icon={BookOpen}
-              />
-            </Reveal>
-
-            {/* Quote Callout — updated to premium personal quote */}
-            <Reveal delay={0.38}>
-              <QuoteCallout
-                quote="Technology changes every day. Curiosity, discipline, and the willingness to keep learning are what truly build great engineers."
-                author="Sriniwas Awasthi"
-                role="Full-Stack Software Engineer & AI Systems Developer"
-              />
-            </Reveal>
-
-            {/* Milestone Roadmap Component */}
-            <Reveal delay={0.45}>
-              <div className="pt-4">
-                <LearningMilestones />
+            {/* Engineering Discipline Commitment */}
+            <Reveal delay={0.35}>
+              <div className="p-6 rounded-2xl border border-[#39FF14]/20 bg-[#060806]/80 backdrop-blur-md">
+                <div className="flex items-center gap-3 mb-3">
+                  <GitBranch className="w-5 h-5 text-[#39FF14]" />
+                  <h3 className="font-heading font-bold text-sm text-foreground">
+                    Software Quality &amp; Production Philosophy
+                  </h3>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  Clean code is defined by clarity, maintainability, and measurable resilience under edge cases. Every production module incorporates type safety, automated tests, clean git commits, and benchmarked execution speed.
+                </p>
               </div>
             </Reveal>
           </div>

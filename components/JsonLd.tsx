@@ -11,7 +11,7 @@ export function JsonLd() {
     name: 'Sriniwas Awasthi',
     alternateName: 'Sriniwas Awasthi',
     description:
-      '2nd year Computer Science Engineering Student at P.D.A College of Engineering, Full Stack Developer, and AI Systems Builder based in Kalaburagi, India.',
+      'Computer Science & Engineering Student at P.D.A College of Engineering (Expected 2028), Full-Stack Software Engineer, and AI Systems Builder based in Kalaburagi, India.',
     url: siteConfig.url,
     sameAs: [siteConfig.links.github, siteConfig.links.linkedin],
     jobTitle: 'Computer Science Engineering Student',

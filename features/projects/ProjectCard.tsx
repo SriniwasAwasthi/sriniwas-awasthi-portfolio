@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { ArrowUpRight, FolderOpen, Star, GitFork, Calendar, Github, Code2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import type { ArchitectureDecisionRecord, WarStory, TelemetryMatrix, TestingHygiene } from '@/types';
 
 export interface DynamicProject {
   id: string;
@@ -23,6 +24,12 @@ export interface DynamicProject {
   features?: string[];
   learnings?: string;
   future?: string[];
+  videoUrl?: string;
+  videoDuration?: string;
+  adr?: ArchitectureDecisionRecord;
+  warStory?: WarStory;
+  telemetry?: TelemetryMatrix;
+  testingHygiene?: TestingHygiene;
 }
 
 interface ProjectCardProps {
@@ -109,7 +116,7 @@ export function ProjectCard({ project, onOpenDetails }: ProjectCardProps) {
         </div>
 
         {/* Tech Stack Badges */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
+        <div className="flex flex-wrap gap-1.5 mb-3">
           {project.tech.slice(0, 3).map((item) => (
             <span
               key={item}
@@ -124,6 +131,32 @@ export function ProjectCard({ project, onOpenDetails }: ProjectCardProps) {
             </span>
           )}
         </div>
+
+        {/* Architectural Pillars Available Badges */}
+        {(project.adr || project.warStory || project.telemetry || project.testingHygiene) && (
+          <div className="flex flex-wrap items-center gap-1.5 mb-4">
+            {project.adr && (
+              <span className="text-[9px] font-mono font-semibold px-2 py-0.5 rounded bg-[#39FF14]/10 text-[#39FF14] border border-[#39FF14]/30">
+                ADR
+              </span>
+            )}
+            {project.warStory && (
+              <span className="text-[9px] font-mono font-semibold px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 border border-rose-500/30">
+                War Story
+              </span>
+            )}
+            {project.telemetry && (
+              <span className="text-[9px] font-mono font-semibold px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+                Telemetry
+              </span>
+            )}
+            {project.testingHygiene && (
+              <span className="text-[9px] font-mono font-semibold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30">
+                Defense
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Case Study Callout */}
         <div className="flex items-center justify-between pt-1">

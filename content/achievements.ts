@@ -47,18 +47,18 @@ export const achievements: Achievement[] = [
 
 export const achievementPlaceholders: AchievementPlaceholder[] = [
   {
-    label: 'Technical Certifications',
-    description: 'Preparing for cloud and engineering certification tracks.',
-    iconName: 'Bookmark',
-  },
-  {
-    label: 'Open Source Contributions',
-    description: 'Planning contributions to TypeScript and Next.js ecosystem tooling.',
+    label: 'Open-Source Tooling & Repositories',
+    description: 'Maintaining 16+ public repositories with automated CI pipelines, strict TypeScript types, and clean Git history.',
     iconName: 'GitPullRequest',
   },
   {
-    label: 'Research & Publications',
-    description: 'Exploring AI systems and automation for future technical writing.',
+    label: 'Algorithmic Problem-Solving Discipline',
+    description: 'Continuous practice in Java & C++ focusing on optimal asymptotic time & space complexity guarantees.',
+    iconName: 'Bookmark',
+  },
+  {
+    label: 'Applied AI Tooling & Prompt Contracts',
+    description: 'Engineering structured JSON schema RPC validation and hybrid model fallbacks for desktop voice agents.',
     iconName: 'FileText',
   },
 ];

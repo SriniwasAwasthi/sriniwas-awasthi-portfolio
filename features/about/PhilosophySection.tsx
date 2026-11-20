@@ -8,32 +8,32 @@ import Stack from '@/components/ui/Stack';
 export function PhilosophySection() {
   const cards = [
     {
-      id: 'build',
-      title: 'Learn by Building',
-      icon: Compass,
-      content:
-        'I learn best by building. Starting with an empty repository, experimenting, and working through failures turns concepts into real understanding. Every project is an opportunity to learn something new and make the next one better.',
-    },
-    {
-      id: 'care',
-      title: 'Code with Care',
+      id: 'working-code',
+      title: 'Working Code > Clever Code',
       icon: ShieldCheck,
       content:
-        'Good code should be easy to understand, easy to maintain, and built to last. I value clarity, thoughtful design, and simplicity—not just to write better software, but to make life easier for the people who work with it after me.',
+        'Write code for the next engineer debugging production at 2 AM. Prioritize readable, explicit flow over dense, unreadable one-liners and premature optimization.',
     },
     {
-      id: 'curious',
-      title: 'Stay Curious',
+      id: 'strict-types',
+      title: 'Strict Types & Schema Boundaries',
+      icon: Compass,
+      content:
+        'Never trust raw data across network or user boundaries. Enforce strict runtime validation with Zod/Pydantic so edge cases fail at compile time—not in front of users.',
+    },
+    {
+      id: 'measure-first',
+      title: 'Measure Before Optimizing',
       icon: Award,
       content:
-        'Technology changes quickly, but the fundamentals remain. I focus on understanding the ideas behind the tools I use, staying curious, adapting to change, and learning continuously.',
+        'Never guess performance bottlenecks. Profile CPU flamegraphs, measure network waterfalls, and benchmark tail latency (p95/p99) before changing a single line of code.',
     },
     {
-      id: 'solve',
-      title: 'Solve What Matters',
+      id: 'failure-modes',
+      title: 'Design for Failure Modes First',
       icon: Lightbulb,
       content:
-        'Technology is only valuable when it creates meaningful impact. I enjoy turning real problems into simple, reliable solutions that reduce friction, improve experiences, and make something better than it was before.',
+        'System reliability is defined by how software behaves when things break. Build offline fallbacks, graceful degradation, and idempotent retries into every service.',
     },
   ];
 
@@ -50,7 +50,7 @@ export function PhilosophySection() {
         <Reveal delay={0.1}>
           <div className="flex flex-col items-center">
             <span className="text-xs font-bold tracking-widest text-[#39FF14] uppercase font-mono mb-2 neon-text-glow">
-              10 // Beyond Code
+              09 // Beyond Code &amp; Philosophy
             </span>
             <h2 className="text-3xl md:text-4xl font-heading font-extrabold tracking-tight">
               Personal Philosophy

@@ -43,8 +43,11 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     dangerouslyAllowSVG: false,
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
+
+  // Allow dev origin from network
+  // @ts-expect-error allowedDevOrigins is valid in Next.js 15
+  allowedDevOrigins: ['192.168.29.197', 'localhost', '127.0.0.1'],
 
   // Experimental: faster builds
   experimental: {
@@ -59,8 +62,44 @@ const nextConfig: NextConfig = {
         headers: securityHeaders,
       },
       {
-        // Aggressive caching for static assets
-        source: '/(.*)\\.(ico|png|jpg|jpeg|gif|webp|svg|woff|woff2|ttf|otf)',
+        // Serve images with inline disposition so "Open in new tab" opens instead of downloading
+        source: '/(.*)\\.(ico|png|jpg|jpeg|gif|webp|svg)',
+        headers: [
+          {
+            key: 'Content-Disposition',
+            value: 'inline',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // High-performance video streaming with range-request support
+        source: '/videos/(.*)\\.(mp4|webm)',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'video/mp4',
+          },
+          {
+            key: 'Content-Disposition',
+            value: 'inline',
+          },
+          {
+            key: 'Accept-Ranges',
+            value: 'bytes',
+          },
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Aggressive caching for fonts
+        source: '/(.*)\\.(woff|woff2|ttf|otf)',
         headers: [
           {
             key: 'Cache-Control',

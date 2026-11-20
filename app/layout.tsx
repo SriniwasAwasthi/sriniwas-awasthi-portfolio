@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { inter, outfit, caveat } from './fonts';
 import './globals.css';
 import { ThemeProvider } from '@/components/providers/theme-provider';
@@ -91,7 +92,7 @@ export const metadata: Metadata = {
     title: siteConfig.title,
     description: siteConfig.description,
     images: ['/opengraph-image'],
-    creator: '@srinivas_dev', // placeholder handle
+    creator: '@SriniwasAwasthi',
   },
 
   icons: {
@@ -137,6 +138,25 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${outfit.variable} ${caveat.variable} font-sans antialiased`}
       >
+        {/* Google Analytics 4 (GA4) */}
+        {siteConfig.googleAnalyticsId && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${siteConfig.googleAnalyticsId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics-init" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${siteConfig.googleAnalyticsId}', {
+                  page_path: window.location.pathname,
+                });
+              `}
+            </Script>
+          </>
+        )}
         <ThemeProvider>
           <div className="relative min-h-screen bg-background text-foreground">{children}</div>
         </ThemeProvider>

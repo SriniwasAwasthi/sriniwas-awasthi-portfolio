@@ -1,10 +1,11 @@
 export const siteConfig = {
   name: 'Sriniwas Awasthi',
-  title: 'Sriniwas Awasthi — Full-Stack Software Engineer & AI Systems Developer',
+  title: 'Sriniwas Awasthi — Full-Stack Software Engineer | TypeScript, Java & Applied AI Workflows',
   description:
-    'Portfolio of Sriniwas Awasthi — 3rd Year Computer Science & Software Engineering Student at P.D.A College of Engineering (Kalaburagi), building modern web apps, Java DSA tools, and AI systems.',
+    'Portfolio of Sriniwas Awasthi — Computer Science & Software Engineering Student at P.D.A College of Engineering (Kalaburagi), building high-performance web systems, Java DSA tooling, and applied AI workflows.',
   url: 'https://sriniwas-awasthi-portfolio.netlify.app',
   ogImage: 'https://sriniwas-awasthi-portfolio.netlify.app/og.png',
+  googleAnalyticsId: process.env.NEXT_PUBLIC_GA_ID || 'G-4K6M13FVMB',
   links: {
     github: 'https://github.com/SriniwasAwasthi',
     linkedin: 'https://www.linkedin.com/in/sriniwas-awasthi/',

@@ -23,7 +23,7 @@ export function JourneyTimeline() {
         <Reveal delay={0.1}>
           <div className="flex flex-col mb-16">
             <span className="text-xs font-bold tracking-widest text-[#39FF14] uppercase font-mono mb-2 neon-text-glow">
-              09 // Journey
+              08 // Engineering Journey
             </span>
             <div className="flex items-center gap-4">
               <h2 className="text-3xl md:text-4xl font-heading font-extrabold tracking-tight">

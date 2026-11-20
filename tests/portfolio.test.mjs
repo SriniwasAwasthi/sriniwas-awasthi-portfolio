@@ -20,11 +20,10 @@ const PORTFOLIO_CONFIG = {
     email: 'sriawasthi164@gmail.com',
   },
   flagshipProjects: [
+    'gemini-flow',
+    'maison-noir',
     'java-dsa-tracker',
-    'amber-and-herb',
-    'stellar-assault-space-shooter',
-    'kixtra-studio',
-    'book-matrix-lms',
+    'solaria-estates',
   ],
 };
 
@@ -35,9 +34,11 @@ test('Portfolio Config: developer metadata is complete', () => {
 });
 
 test('Portfolio Config: all flagship projects are indexed', () => {
-  assert.equal(PORTFOLIO_CONFIG.flagshipProjects.length, 5);
+  assert.equal(PORTFOLIO_CONFIG.flagshipProjects.length, 4);
+  assert.ok(PORTFOLIO_CONFIG.flagshipProjects.includes('gemini-flow'));
   assert.ok(PORTFOLIO_CONFIG.flagshipProjects.includes('java-dsa-tracker'));
-  assert.ok(PORTFOLIO_CONFIG.flagshipProjects.includes('amber-and-herb'));
+  assert.ok(PORTFOLIO_CONFIG.flagshipProjects.includes('maison-noir'));
+  assert.ok(PORTFOLIO_CONFIG.flagshipProjects.includes('solaria-estates'));
 });
 
 test('Resume Assets: valid ATS single-page resume PDFs exist in public directory', async () => {

@@ -67,13 +67,17 @@ export function Hero() {
           {/* Availability Badge */}
           <motion.div
             variants={slideUp}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-[#5cff3d]/30 bg-[#5cff3d]/10 text-xs font-semibold tracking-wide text-[#5cff3d] mb-6 shadow-[0_0_15px_rgba(92,255,61,0.15)]"
+            className="inline-flex flex-wrap items-center gap-2.5 px-4 py-2 rounded-full border border-[#5cff3d]/40 bg-[#5cff3d]/10 text-xs font-semibold tracking-wide text-[#5cff3d] mb-6 shadow-[0_0_20px_rgba(92,255,61,0.2)] backdrop-blur-md"
           >
-            <span className="relative flex h-2 w-2">
+            <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#5cff3d] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#5cff3d]"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#5cff3d]"></span>
             </span>
-            Open to Internships
+            <span className="font-bold">Available for Summer &amp; Fall 2025/2026 Internships</span>
+            <span className="hidden sm:inline-block text-[#5cff3d]/50">•</span>
+            <span className="hidden sm:inline-block font-mono text-[11px] text-[#5cff3d]/90">
+              Bangalore · Hyderabad · Pune · Remote
+            </span>
           </motion.div>
 
           {/* Greeting / Subtitle */}
@@ -81,7 +85,7 @@ export function Hero() {
             variants={slideUp}
             className="text-xs font-bold tracking-widest text-muted-foreground uppercase mb-2 font-heading"
           >
-            3rd Year CS &amp; Software Engineering Student · P.D.A College of Engineering, Kalaburagi
+            B.E. Computer Science &amp; Engineering · Expected June 2028 · P.D.A College of Engineering, Kalaburagi
           </motion.p>
 
           {/* Main Headline */}
@@ -97,7 +101,7 @@ export function Hero() {
             variants={slideUp}
             className="text-xl sm:text-2xl font-semibold tracking-tight text-foreground/80 mb-6"
           >
-            Full-Stack Software Engineer &amp; AI Systems Developer
+            Full-Stack Software Engineer | TypeScript, Java &amp; Applied AI Workflows
           </motion.h2>
 
           {/* Value Prop & Description */}
@@ -105,7 +109,7 @@ export function Hero() {
             variants={slideUp}
             className="text-base text-muted-foreground max-w-xl mb-8 leading-relaxed"
           >
-            Building 10+ modern web applications using Next.js 15, TypeScript, and Gemini AI.
+            Building high-performance web systems, Java &amp; C++ algorithmic tooling, and applied AI integrations with production-grade engineering discipline.
           </motion.p>
 
           {/* CTAs */}
@@ -259,7 +263,12 @@ export function Hero() {
                         <span className="text-[#B7FFAE]">&quot;Sriniwas Awasthi&quot;</span>,{'\n'}
                         {'  '}role:{' '}
                         <span className="text-[#B7FFAE]">
-                          &quot;Full-Stack Software Engineer &amp; AI Systems Developer&quot;
+                          &quot;Full-Stack Software Engineer&quot;
+                        </span>
+                        ,{'\n'}
+                        {'  '}stack:{' '}
+                        <span className="text-[#B7FFAE]">
+                          &quot;TypeScript, Java, C++, SQL &amp; Applied AI&quot;
                         </span>
                         ,{'\n'}
                         {'  '}college:{' '}
@@ -267,9 +276,14 @@ export function Hero() {
                           &quot;P.D.A College of Engineering, Kalaburagi&quot;
                         </span>
                         ,{'\n'}
-                        {'  '}year:{' '}
+                        {'  '}degree:{' '}
                         <span className="text-[#B7FFAE]">
-                          &quot;3rd Year CS &amp; Software Engineering Student&quot;
+                          &quot;B.E. Computer Science &amp; Engineering&quot;
+                        </span>
+                        ,{'\n'}
+                        {'  '}algorithmicFocus:{' '}
+                        <span className="text-[#B7FFAE]">
+                          &quot;Trees, Graphs, DP &amp; SM-2 Curves&quot;
                         </span>
                         ,{'\n'}
                         {'  '}publicRepos: <span className="text-[#39FF14]">{publicReposCount}</span>,{'\n'}
@@ -277,11 +291,11 @@ export function Hero() {
                         {'\n'}
                         {'  '}currentFocus:{' '}
                         <span className="text-[#B7FFAE]">
-                          &quot;Next.js 15, TypeScript &amp; Gemini AI Systems&quot;
+                          &quot;Web Systems, Concurrency &amp; Algorithmic Tools&quot;
                         </span>
                         ,{'\n'}
                         {'  '}status:{' '}
-                        <span className="text-[#B7FFAE]">&quot;Open to Internships&quot;</span>
+                        <span className="text-[#B7FFAE]">&quot;Open to Internships (Summer/Fall 2025/2026)&quot;</span>
                         {'\n'}&#125;;
                       </code>
                     </pre>
@@ -290,48 +304,33 @@ export function Hero() {
                       <code>
                         &#123;{'\n'}
                         {'  '}
-                        <span className="text-[#39FF14]">&quot;coreTechStack&quot;</span>: [{'\n'}
+                        <span className="text-[#39FF14]">&quot;coreLanguages&quot;</span>: [{'\n'}
                         {'    '}
-                        <span className="text-[#B7FFAE]">&quot;Next.js 15&quot;</span>,{' '}
-                        <span className="text-[#B7FFAE]">&quot;React&quot;</span>,{' '}
-                        <span className="text-[#B7FFAE]">&quot;TypeScript&quot;</span>,{' '}
-                        <span className="text-[#B7FFAE]">&quot;Tailwind CSS&quot;</span>,{'\n'}
+                        <span className="text-[#B7FFAE]">&quot;TypeScript / JavaScript&quot;</span>,{' '}
+                        <span className="text-[#B7FFAE]">&quot;Java (DSA &amp; OOP)&quot;</span>,{'\n'}
                         {'    '}
-                        <span className="text-[#B7FFAE]">&quot;Python&quot;</span>,{' '}
-                        <span className="text-[#B7FFAE]">&quot;REST APIs&quot;</span>,{' '}
-                        <span className="text-[#B7FFAE]">&quot;Gemini AI API&quot;</span>
+                        <span className="text-[#B7FFAE]">&quot;C++ / C (Algorithms)&quot;</span>,{' '}
+                        <span className="text-[#B7FFAE]">&quot;SQL (Relational Schemas)&quot;</span>
                         {'\n'}
                         {'  '}],{'\n'}
                         {'  '}
-                        <span className="text-[#39FF14]">&quot;softwareDevSkills&quot;</span>: [
-                        {'\n'}
+                        <span className="text-[#39FF14]">&quot;frontendAndSystems&quot;</span>: [{'\n'}
                         {'    '}
-                        <span className="text-[#B7FFAE]">
-                          &quot;Full-Stack Architecture &amp; Database Schemas&quot;
-                        </span>
-                        ,{'\n'}
+                        <span className="text-[#B7FFAE]">&quot;Next.js 15 (App Router)&quot;</span>,{' '}
+                        <span className="text-[#B7FFAE]">&quot;React 19 Concurrent Mode&quot;</span>,{'\n'}
                         {'    '}
-                        <span className="text-[#B7FFAE]">
-                          &quot;Data Structures &amp; Object-Oriented Design&quot;
-                        </span>
-                        ,{'\n'}
-                        {'    '}
-                        <span className="text-[#B7FFAE]">
-                          &quot;Git Workflows &amp; RESTful APIs&quot;
-                        </span>
+                        <span className="text-[#B7FFAE]">&quot;Tailwind CSS v4&quot;</span>,{' '}
+                        <span className="text-[#B7FFAE]">&quot;Web Audio API / Canvas WebGL&quot;</span>
                         {'\n'}
                         {'  '}],{'\n'}
                         {'  '}
-                        <span className="text-[#39FF14]">&quot;extraSkills&quot;</span>: [{'\n'}
+                        <span className="text-[#39FF14]">&quot;qualityAndTooling&quot;</span>: [{'\n'}
                         {'    '}
-                        <span className="text-[#B7FFAE]">
-                          &quot;AI System Prompt Architecture&quot;
-                        </span>,{' '}
-                        <span className="text-[#B7FFAE]">&quot;3D Web &amp; Canvas Games&quot;</span>,{'\n'}
+                        <span className="text-[#B7FFAE]">&quot;Automated Unit &amp; E2E Testing&quot;</span>,{' '}
+                        <span className="text-[#B7FFAE]">&quot;GitHub Actions CI/CD&quot;</span>,{'\n'}
                         {'    '}
-                        <span className="text-[#B7FFAE]">
-                          &quot;Rapid Full-Stack Prototyping&quot;
-                        </span>
+                        <span className="text-[#B7FFAE]">&quot;Type-Safe Contracts (Zod)&quot;</span>,{' '}
+                        <span className="text-[#B7FFAE]">&quot;DSP Audio Filters (Python)&quot;</span>
                         {'\n'}
                         {'  '}]{'\n'}&#125;
                       </code>

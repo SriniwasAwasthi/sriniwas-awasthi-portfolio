@@ -98,6 +98,7 @@ export function Navbar() {
           href="/SRINIWAS_Resume.pdf"
           target="_blank"
           rel="noopener noreferrer"
+          download="Sriniwas_Awasthi_Resume.pdf"
           className={cn(
             buttonVariants({ variant: 'outline', size: 'sm' }),
             'gap-2 text-xs rounded-full cursor-pointer hover:bg-accent border-0 bg-transparent py-1.5 px-4 h-9',

@@ -1,9 +1,17 @@
 'use client';
 
+import * as React from 'react';
 import { useReducedMotion } from 'framer-motion';
 
 export function useMotionPresets() {
-  const shouldReduceMotion = useReducedMotion();
+  const [mounted, setMounted] = React.useState(false);
+  const prefersReduced = useReducedMotion();
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const shouldReduceMotion = mounted ? Boolean(prefersReduced) : false;
 
   // Primary animations configurations
   const fadeIn = {

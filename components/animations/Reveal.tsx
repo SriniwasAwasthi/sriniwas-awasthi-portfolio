@@ -15,7 +15,7 @@ interface RevealProps {
 
 /**
  * Ultra-smooth, hardware-accelerated reveal animation.
- * Optimized for 60/120fps scrolling without main-thread spring physics overhead.
+ * Hydration-safe: prevents SSR/client style mismatch on initial render.
  */
 export function Reveal({
   children,
@@ -26,7 +26,15 @@ export function Reveal({
   width = 'w-full',
   className = '',
 }: RevealProps) {
-  const shouldReduceMotion = useReducedMotion();
+  const [mounted, setMounted] = React.useState(false);
+  const prefersReduced = useReducedMotion();
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // During SSR and initial hydration pass, use consistent defaults
+  const shouldReduceMotion = mounted ? Boolean(prefersReduced) : false;
 
   const variants = React.useMemo(
     () => ({

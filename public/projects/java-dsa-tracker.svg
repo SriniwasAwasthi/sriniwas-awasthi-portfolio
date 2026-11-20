@@ -1,0 +1,49 @@
+<svg width="800" height="450" viewBox="0 0 800 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="450" rx="16" fill="#060906"/>
+  <rect x="1" y="1" width="798" height="448" rx="15" stroke="#39FF14" stroke-width="1.5" stroke-opacity="0.3"/>
+  
+  <!-- Window Header -->
+  <rect width="800" height="40" rx="16" fill="#0d140d"/>
+  <circle cx="30" cy="20" r="5" fill="#EF4444"/>
+  <circle cx="48" cy="20" r="5" fill="#F59E0B"/>
+  <circle cx="66" cy="20" r="5" fill="#10B981"/>
+  <text x="400" y="24" fill="#39FF14" font-family="monospace" font-size="12" font-weight="bold" text-anchor="middle" letter-spacing="1">JAVA DSA JOURNEY TRACKER // SM-2 SPACED REPETITION &amp; AI REVIEW MENTOR</text>
+
+  <!-- Left: SM-2 Spaced Repetition Memory Matrix -->
+  <rect x="30" y="60" width="370" height="360" rx="10" fill="#0a100a" stroke="#39FF14" stroke-width="1" stroke-opacity="0.25"/>
+  <text x="50" y="90" fill="#39FF14" font-family="monospace" font-size="11" font-weight="bold">SUPERMEMO SM-2 SPACED RETENTION ENGINE</text>
+  
+  <!-- Retention Curve Graph -->
+  <path d="M50 210 Q90 120 140 145 T230 130 T320 110 T370 100" stroke="#39FF14" stroke-width="2.5" fill="none"/>
+  <circle cx="140" cy="145" r="4" fill="#39FF14"/>
+  <circle cx="230" cy="130" r="4" fill="#39FF14"/>
+  <circle cx="320" cy="110" r="4" fill="#39FF14"/>
+  <text x="50" y="235" fill="#889988" font-family="monospace" font-size="10">Ebbinghaus Retention Curve: I(n) = I(n-1) * EF</text>
+
+  <rect x="50" y="255" width="330" height="70" rx="6" fill="#111c11" stroke="#39FF14" stroke-width="1" stroke-opacity="0.3"/>
+  <text x="65" y="280" fill="#ffffff" font-family="monospace" font-size="11">Curriculum: 20+ Solved Algorithmic Problems</text>
+  <text x="65" y="298" fill="#39FF14" font-family="monospace" font-size="10">Trees · Graphs (BFS/DFS) · Dynamic Programming · Heaps</text>
+  <text x="65" y="315" fill="#889988" font-family="monospace" font-size="10">Auto Re-Balancing: Automated Review Interval Alerts</text>
+
+  <text x="50" y="355" fill="#a3e635" font-family="monospace" font-size="10">CROSS-PLATFORM: React 19 + TypeScript + Capacitor (Android/Web)</text>
+  <text x="50" y="375" fill="#889988" font-family="monospace" font-size="10">CODE RUNNER: In-browser algorithmic arena with syntax highlighting</text>
+
+  <!-- Right: Gemini AI Structured Review Mentor -->
+  <rect x="420" y="60" width="350" height="360" rx="10" fill="#0a100a" stroke="#39FF14" stroke-width="1" stroke-opacity="0.25"/>
+  <text x="440" y="90" fill="#39FF14" font-family="monospace" font-size="11" font-weight="bold">AI CODE MENTOR // GEMINI 3.7 JSON RPC</text>
+
+  <rect x="440" y="110" width="310" height="130" rx="8" fill="#040604" stroke="#39FF14" stroke-width="1" stroke-opacity="0.4"/>
+  <text x="455" y="135" fill="#889988" font-family="monospace" font-size="10">// Structured Gemini Mentorship Response</text>
+  <text x="455" y="155" fill="#39FF14" font-family="monospace" font-size="10">{</text>
+  <text x="470" y="175" fill="#ffffff" font-family="monospace" font-size="10">"timeComplexity": "O(V + E)",</text>
+  <text x="470" y="195" fill="#ffffff" font-family="monospace" font-size="10">"spaceComplexity": "O(V) recursion depth",</text>
+  <text x="470" y="215" fill="#a3e635" font-family="monospace" font-size="10">"patternIdentified": "Breadth-First Search"</text>
+  <text x="455" y="232" fill="#39FF14" font-family="monospace" font-size="10">}</text>
+
+  <rect x="440" y="260" width="310" height="135" rx="8" fill="#121d12" stroke="#39FF14" stroke-width="1" stroke-opacity="0.3"/>
+  <text x="455" y="285" fill="#39FF14" font-family="monospace" font-size="11" font-weight="bold">FEATURED CAPABILITIES</text>
+  <text x="455" y="308" fill="#e2e8f0" font-family="monospace" font-size="10">• SM-2 spaced repetition memory decay curve</text>
+  <text x="455" y="328" fill="#e2e8f0" font-family="monospace" font-size="10">• Google Gemini 3.7 AI code reviewer</text>
+  <text x="455" y="348" fill="#e2e8f0" font-family="monospace" font-size="10">• Dynamic roadmap category mastery tracking</text>
+  <text x="455" y="372" fill="#39FF14" font-family="monospace" font-size="10" font-weight="bold">STATUS: PRODUCTION-READY REPOSITORY ✓</text>
+</svg>

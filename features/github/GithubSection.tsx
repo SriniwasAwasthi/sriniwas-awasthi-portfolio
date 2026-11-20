@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Github, Code, ArrowUpRight, Loader2, RefreshCw } from 'lucide-react';
+import { Github, Code, ArrowUpRight, Loader2, RefreshCw, Layers } from 'lucide-react';
 import { Reveal } from '@/components/animations/Reveal';
 import { cn } from '@/lib/utils';
 import {
@@ -15,7 +15,12 @@ import {
 } from '@/lib/github';
 
 export function GithubSection() {
+  const [mounted, setMounted] = React.useState(false);
   const fallbackData = React.useMemo(() => getFallbackGitHubData(), []);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const [contributions, setContributions] = React.useState<ContributionDay[]>(
     fallbackData.contributions
@@ -29,6 +34,7 @@ export function GithubSection() {
   const [languageDistribution, setLanguageDistribution] = React.useState<LanguageStat[]>(
     fallbackData.languageDistribution
   );
+  const [activeLanguage, setActiveLanguage] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [isLive, setIsLive] = React.useState<boolean>(true);
 
@@ -80,20 +86,18 @@ export function GithubSection() {
   }, []);
 
   const totalRepos = Math.max(publicReposCount, repos.length);
-  const topLanguage = languageDistribution[0]?.lang || 'TypeScript';
 
-  const CIRCUMFERENCE = 251.327;
-  let cumulativeOffset = 0;
-  const pieSegments = languageDistribution.map((item) => {
-    const dashLength = (item.count / (totalRepos || 1)) * CIRCUMFERENCE;
-    const offset = -cumulativeOffset;
-    cumulativeOffset += dashLength;
-    return {
-      ...item,
-      dashLength,
-      offset,
-    };
-  });
+  const langShortNames: Record<string, string> = {
+    TypeScript: 'TS',
+    JavaScript: 'JS',
+    Python: 'PY',
+    'Markdown / Docs': 'DOCS',
+    HTML: 'HTML',
+    Java: 'JAVA',
+    'C++': 'C++',
+    C: 'C',
+    CSS: 'CSS',
+  };
 
   return (
     <section
@@ -200,113 +204,120 @@ export function GithubSection() {
 
                   {/* Heatmap Graph Container - Fits 100% cleanly inside box with zero scrollbar */}
                   <div className="w-full p-3 sm:p-4 rounded-lg bg-[#0d1117]/90 border border-[#30363d]/60 shadow-inner">
-                    <svg
-                      viewBox="0 0 718 112"
-                      className="w-full h-auto block select-none overflow-visible"
-                      aria-label="GitHub Contribution Heatmap"
-                    >
-                      {/* Month Labels */}
-                      {monthLabels.map((item, idx) => (
+                    {mounted ? (
+                      <svg
+                        viewBox="0 0 718 112"
+                        className="w-full h-auto block select-none overflow-visible"
+                        aria-label="GitHub Contribution Heatmap"
+                        suppressHydrationWarning
+                      >
+                        {/* Month Labels */}
+                        {monthLabels.map((item, idx) => (
+                          <text
+                            key={idx}
+                            x={32 + item.col * 12.8}
+                            y={11}
+                            fontSize="9.5"
+                            fill="#8b949e"
+                            fontFamily="monospace"
+                            textAnchor="start"
+                          >
+                            {item.month}
+                          </text>
+                        ))}
+
+                        {/* Weekday Labels */}
                         <text
-                          key={idx}
-                          x={32 + item.col * 12.8}
-                          y={11}
-                          fontSize="9.5"
+                          x={24}
+                          y={39}
+                          fontSize="9"
                           fill="#8b949e"
                           fontFamily="monospace"
-                          textAnchor="start"
+                          textAnchor="end"
                         >
-                          {item.month}
+                          Mon
                         </text>
-                      ))}
+                        <text
+                          x={24}
+                          y={64.5}
+                          fontSize="9"
+                          fill="#8b949e"
+                          fontFamily="monospace"
+                          textAnchor="end"
+                        >
+                          Wed
+                        </text>
+                        <text
+                          x={24}
+                          y={90}
+                          fontSize="9"
+                          fill="#8b949e"
+                          fontFamily="monospace"
+                          textAnchor="end"
+                        >
+                          Fri
+                        </text>
 
-                      {/* Weekday Labels */}
-                      <text
-                        x={24}
-                        y={39}
-                        fontSize="9"
-                        fill="#8b949e"
-                        fontFamily="monospace"
-                        textAnchor="end"
-                      >
-                        Mon
-                      </text>
-                      <text
-                        x={24}
-                        y={64.5}
-                        fontSize="9"
-                        fill="#8b949e"
-                        fontFamily="monospace"
-                        textAnchor="end"
-                      >
-                        Wed
-                      </text>
-                      <text
-                        x={24}
-                        y={90}
-                        fontSize="9"
-                        fill="#8b949e"
-                        fontFamily="monospace"
-                        textAnchor="end"
-                      >
-                        Fri
-                      </text>
+                        {/* Contribution Day Cells (53 weeks x 7 days) */}
+                        {contributions.map((day, idx) => {
+                          const x = 32 + day.col * 12.8;
+                          const y = 20 + day.row * 12.8;
 
-                      {/* Contribution Day Cells (53 weeks x 7 days) */}
-                      {contributions.map((day, idx) => {
-                        const x = 32 + day.col * 12.8;
-                        const y = 20 + day.row * 12.8;
+                          let fill = '#161b22';
+                          let stroke = '#30363d';
+                          let strokeWidth = 0.6;
+                          let strokeOpacity = 0.4;
 
-                        let fill = '#161b22';
-                        let stroke = '#30363d';
-                        let strokeWidth = 0.6;
-                        let strokeOpacity = 0.4;
+                          if (day.level === 1) {
+                            fill = '#0e4429';
+                            stroke = '#006d32';
+                            strokeWidth = 0.5;
+                            strokeOpacity = 0.6;
+                          } else if (day.level === 2) {
+                            fill = '#006d32';
+                            stroke = '#26a641';
+                            strokeWidth = 0.5;
+                            strokeOpacity = 0.8;
+                          } else if (day.level === 3) {
+                            fill = '#26a641';
+                            stroke = '#39d353';
+                            strokeWidth = 0.6;
+                            strokeOpacity = 1;
+                          } else if (day.level === 4) {
+                            fill = '#39d353';
+                            stroke = '#39FF14';
+                            strokeWidth = 0.8;
+                            strokeOpacity = 1;
+                          }
 
-                        if (day.level === 1) {
-                          fill = '#0e4429';
-                          stroke = '#006d32';
-                          strokeWidth = 0.5;
-                          strokeOpacity = 0.6;
-                        } else if (day.level === 2) {
-                          fill = '#006d32';
-                          stroke = '#26a641';
-                          strokeWidth = 0.5;
-                          strokeOpacity = 0.8;
-                        } else if (day.level === 3) {
-                          fill = '#26a641';
-                          stroke = '#39d353';
-                          strokeWidth = 0.6;
-                          strokeOpacity = 1;
-                        } else if (day.level === 4) {
-                          fill = '#39d353';
-                          stroke = '#39FF14';
-                          strokeWidth = 0.8;
-                          strokeOpacity = 1;
-                        }
-
-                        return (
-                          <rect
-                            key={day.date || idx}
-                            x={x}
-                            y={y}
-                            width={10}
-                            height={10}
-                            rx={2}
-                            ry={2}
-                            fill={fill}
-                            stroke={stroke}
-                            strokeWidth={strokeWidth}
-                            strokeOpacity={strokeOpacity}
-                            className="cursor-pointer transition-all duration-150 hover:stroke-[#39FF14] hover:stroke-[1.5] hover:brightness-125"
-                          >
-                            <title>
-                              {day.count === 0 ? 'No' : day.count} contribution
-                              {day.count === 1 ? '' : 's'} on {day.formattedDate}
-                            </title>
-                          </rect>
-                        );
-                      })}
-                    </svg>
+                          return (
+                            <rect
+                              key={day.date || idx}
+                              x={x}
+                              y={y}
+                              width={10}
+                              height={10}
+                              rx={2}
+                              ry={2}
+                              fill={fill}
+                              stroke={stroke}
+                              strokeWidth={strokeWidth}
+                              strokeOpacity={strokeOpacity}
+                              className="cursor-pointer transition-all duration-150 hover:stroke-[#39FF14] hover:stroke-[1.5] hover:brightness-125"
+                            >
+                              <title>
+                                {day.count === 0 ? 'No' : day.count} contribution
+                                {day.count === 1 ? '' : 's'} on {day.formattedDate}
+                              </title>
+                            </rect>
+                          );
+                        })}
+                      </svg>
+                    ) : (
+                      <div className="w-full h-[112px] rounded bg-[#0d1117] flex items-center justify-center text-xs font-mono text-[#39FF14]/50">
+                        Loading Contribution Heatmap...
+                      </div>
+                    )}
 
                     {/* Heatmap Footer: Info & Legend */}
                     <div className="flex items-center justify-between text-[10px] text-muted-foreground pt-3 mt-2 border-t border-[#30363d]/40">
@@ -398,66 +409,262 @@ export function GithubSection() {
             </div>
           </div>
 
-          {/* Right Block - Language Distribution */}
+          {/* Right Block - Modernized Language Distribution Telemetry */}
           <div className="lg:col-span-4">
             <Reveal delay={0.22}>
-              <div className="p-6 rounded-xl border border-[#39FF14]/20 bg-[#060806]/80 backdrop-blur-sm space-y-6 shadow-[0_0_20px_rgba(57,255,20,0.05)]">
-                <div className="flex items-center gap-2 text-foreground font-semibold">
-                  <Code className="w-5 h-5 text-[#39FF14]" />
-                  <span>Language Distribution</span>
+              <div className="p-6 rounded-xl border border-[#39FF14]/20 bg-[#060806]/85 backdrop-blur-md space-y-6 shadow-[0_0_20px_rgba(57,255,20,0.05)] hover:border-[#39FF14]/40 transition-all duration-300">
+                {/* Header */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <div className="p-1.5 rounded-lg bg-[#39FF14]/10 border border-[#39FF14]/30 text-[#39FF14] shadow-[0_0_10px_rgba(57,255,20,0.15)]">
+                      <Code className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="font-heading font-bold text-sm text-foreground">
+                        Language Distribution
+                      </h3>
+                      <span className="text-[10px] text-muted-foreground font-mono block">
+                        Across {totalRepos} public repositories
+                      </span>
+                    </div>
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#161b22] border border-[#39FF14]/30 text-[#39FF14] text-[11px] font-mono font-semibold">
+                    {languageDistribution.length} Stacks
+                  </span>
                 </div>
 
-                {/* SVG Pie Chart */}
-                <div className="flex justify-center py-4 relative">
-                  <svg className="w-36 h-36 transform -rotate-90" viewBox="0 0 100 100">
-                    <circle
-                      cx="50"
-                      cy="50"
-                      r="40"
-                      fill="transparent"
-                      stroke="var(--border)"
-                      strokeWidth="8"
-                      className="opacity-20"
-                    />
-                    {pieSegments.map((seg) => (
-                      <circle
-                        key={seg.lang}
-                        cx="50"
-                        cy="50"
-                        r="40"
-                        fill="transparent"
-                        stroke={seg.hexColor}
-                        strokeWidth="8"
-                        strokeDasharray={`${seg.dashLength} ${CIRCUMFERENCE}`}
-                        strokeDashoffset={seg.offset}
-                        className="transition-all duration-500"
-                      />
-                    ))}
-                  </svg>
+                {/* Cyber Telemetry Spectrum Visualizer */}
+                <div className="relative pt-6 pb-2 px-1 bg-[#0d1117]/50 rounded-xl border border-white/5">
+                  {/* Background Threshold Lines */}
+                  <div className="absolute inset-x-3 top-7 bottom-9 flex flex-col justify-between pointer-events-none opacity-20">
+                    <div className="border-b border-dashed border-[#39FF14] w-full" />
+                    <div className="border-b border-dashed border-[#39FF14] w-full" />
+                    <div className="border-b border-dashed border-[#39FF14] w-full" />
+                    <div className="border-b border-dashed border-[#39FF14]/40 w-full" />
+                  </div>
 
-                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none">
-                    <span className="text-[10px] text-muted-foreground uppercase font-mono">
-                      {totalRepos} Public Repos
-                    </span>
-                    <span className="text-sm font-bold text-[#39FF14] font-heading">
-                      {topLanguage}
-                    </span>
+                  {/* Frequency Spectrum Pillars */}
+                  <div className="relative h-44 flex items-end justify-between gap-2.5 z-10 px-2">
+                    {languageDistribution.slice(0, 5).map((item) => {
+                      const shortName =
+                        langShortNames[item.lang] || item.lang.slice(0, 4).toUpperCase();
+                      const barHeight = Math.max(item.percentage, 7);
+                      const isHovered = activeLanguage === item.lang;
+                      const isDimmed = activeLanguage !== null && !isHovered;
+
+                      return (
+                        <div
+                          key={item.lang}
+                          onMouseEnter={() => setActiveLanguage(item.lang)}
+                          onMouseLeave={() => setActiveLanguage(null)}
+                          onClick={() =>
+                            setActiveLanguage((prev) => (prev === item.lang ? null : item.lang))
+                          }
+                          className={cn(
+                            'flex-1 flex flex-col items-center h-full justify-end cursor-pointer transition-all duration-200 ease-out select-none',
+                            isHovered && 'scale-[1.04] -translate-y-1 z-20',
+                            isDimmed && 'opacity-25 grayscale-[40%]'
+                          )}
+                        >
+                          {/* Floating Numerical Readout */}
+                          <div className="h-9 flex flex-col items-center justify-end select-none mb-1.5 transition-all duration-200">
+                            <span
+                              className={cn(
+                                'text-xs font-mono font-bold block leading-none transition-all duration-200',
+                                isHovered && 'scale-110'
+                              )}
+                              style={{
+                                color: item.hexColor,
+                                textShadow: isHovered
+                                  ? `0 0 10px ${item.hexColor}`
+                                  : undefined,
+                              }}
+                            >
+                              {item.percentage}%
+                            </span>
+                            <span
+                              className={cn(
+                                'text-[9px] font-mono font-semibold block h-3 leading-3 mt-0.5 transition-all duration-200',
+                                isHovered
+                                  ? 'opacity-100 text-foreground font-bold'
+                                  : 'opacity-0'
+                              )}
+                            >
+                              {item.count} {item.count === 1 ? 'repo' : 'repos'}
+                            </span>
+                          </div>
+
+                          {/* Cyber Pillar Track & Luminous Fill */}
+                          <div
+                            className={cn(
+                              'w-full max-w-[42px] h-32 rounded-t-md bg-[#161b22]/80 border relative flex items-end p-0.5 overflow-hidden transition-all duration-200',
+                              isHovered
+                                ? 'bg-[#161b22]'
+                                : 'border-white/5'
+                            )}
+                            style={{
+                              borderColor: isHovered ? item.hexColor : undefined,
+                              boxShadow: isHovered
+                                ? `0 0 16px ${item.hexColor}60, inset 0 0 10px ${item.hexColor}20`
+                                : undefined,
+                            }}
+                          >
+                            <div
+                              className={cn(
+                                'w-full rounded-t-sm relative transition-all duration-200',
+                                isHovered && 'brightness-125'
+                              )}
+                              style={{
+                                height: `${barHeight}%`,
+                                background: `linear-gradient(180deg, ${item.hexColor} 0%, ${item.hexColor}25 100%)`,
+                                boxShadow: isHovered
+                                  ? `0 0 16px ${item.hexColor}`
+                                  : `0 0 8px ${item.hexColor}40`,
+                              }}
+                            >
+                              {/* Glowing LED Peak Cap */}
+                              <div
+                                className="absolute top-0 inset-x-0 h-1 rounded-t-sm transition-all duration-200"
+                                style={{
+                                  backgroundColor: item.hexColor,
+                                  boxShadow: isHovered
+                                    ? `0 0 14px ${item.hexColor}, 0 0 4px #fff`
+                                    : `0 0 8px ${item.hexColor}`,
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                          {/* Bottom Tech Label */}
+                          <div className="mt-2.5 text-center select-none">
+                            <span
+                              className={cn(
+                                'text-[10px] font-mono font-bold uppercase tracking-wider block transition-all duration-200',
+                                isHovered ? 'scale-110 font-extrabold' : 'text-muted-foreground'
+                              )}
+                              style={{
+                                color: isHovered ? item.hexColor : undefined,
+                                textShadow: isHovered ? `0 0 8px ${item.hexColor}` : undefined,
+                              }}
+                            >
+                              {shortName}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
-                {/* Dynamic Language Legend List */}
-                <div className="space-y-2.5 text-xs">
-                  {languageDistribution.slice(0, 5).map((item) => (
-                    <div key={item.lang} className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className={cn('w-2.5 h-2.5 rounded', item.color)} />
-                        <span className="text-muted-foreground">{item.lang}</span>
+                {/* Interactive Detailed Language Breakdown Rows */}
+                <div className="space-y-2">
+                  {languageDistribution.slice(0, 5).map((item) => {
+                    const isHovered = activeLanguage === item.lang;
+                    const isDimmed = activeLanguage !== null && !isHovered;
+
+                    return (
+                      <div
+                        key={item.lang}
+                        onMouseEnter={() => setActiveLanguage(item.lang)}
+                        onMouseLeave={() => setActiveLanguage(null)}
+                        onClick={() =>
+                          setActiveLanguage((prev) => (prev === item.lang ? null : item.lang))
+                        }
+                        className={cn(
+                          'group flex items-center justify-between p-2.5 rounded-lg border transition-all duration-200 cursor-pointer select-none',
+                          isHovered
+                            ? 'translate-x-1'
+                            : 'bg-[#0d1117]/60 border-border/20',
+                          isDimmed && 'opacity-25 grayscale-[30%]'
+                        )}
+                        style={
+                          isHovered
+                            ? {
+                                backgroundColor: `${item.hexColor}18`,
+                                borderColor: item.hexColor,
+                                boxShadow: `0 0 20px ${item.hexColor}30, inset 0 0 10px ${item.hexColor}15`,
+                              }
+                            : undefined
+                        }
+                      >
+                        <div className="flex items-center gap-2.5 min-w-0">
+                          <span
+                            className={cn(
+                              'w-2.5 h-2.5 rounded-full shrink-0 transition-transform duration-200',
+                              isHovered && 'scale-125'
+                            )}
+                            style={{
+                              backgroundColor: item.hexColor,
+                              boxShadow: isHovered ? `0 0 10px ${item.hexColor}` : undefined,
+                            }}
+                          />
+                          <span
+                            className={cn(
+                              'text-xs font-semibold truncate transition-all duration-200',
+                              isHovered ? 'font-bold' : 'text-foreground'
+                            )}
+                            style={{
+                              color: isHovered ? item.hexColor : undefined,
+                              textShadow: isHovered ? `0 0 8px ${item.hexColor}60` : undefined,
+                            }}
+                          >
+                            {item.lang}
+                          </span>
+                        </div>
+
+                        <div className="flex items-center gap-2.5 shrink-0">
+                          {/* Mini inline progress track */}
+                          <div className="w-14 sm:w-16 h-1.5 bg-[#161b22] rounded-full overflow-hidden hidden sm:block border border-white/5">
+                            <div
+                              className={cn(
+                                'h-full rounded-full transition-all duration-200',
+                                isHovered && 'brightness-125'
+                              )}
+                              style={{
+                                width: `${item.percentage}%`,
+                                backgroundColor: item.hexColor,
+                                boxShadow: isHovered ? `0 0 8px ${item.hexColor}` : undefined,
+                              }}
+                            />
+                          </div>
+
+                          <span
+                            className={cn(
+                              'text-[11px] font-mono px-2 py-0.5 rounded border transition-colors duration-200',
+                              isHovered
+                                ? 'bg-[#161b22] text-foreground border-white/30 font-semibold'
+                                : 'bg-[#161b22] border-border/40 text-muted-foreground'
+                            )}
+                          >
+                            {item.count} {item.count === 1 ? 'repo' : 'repos'}
+                          </span>
+                          <span
+                            className={cn(
+                              'text-xs font-mono font-bold w-8 text-right transition-all duration-200',
+                              isHovered && 'scale-110'
+                            )}
+                            style={{
+                              color: isHovered ? item.hexColor : undefined,
+                              textShadow: isHovered ? `0 0 8px ${item.hexColor}60` : undefined,
+                            }}
+                          >
+                            {item.percentage}%
+                          </span>
+                        </div>
                       </div>
-                      <span className="font-bold text-foreground font-mono">
-                        {item.count} {item.count === 1 ? 'repo' : 'repos'} ({item.percentage}%)
-                      </span>
-                    </div>
-                  ))}
+                    );
+                  })}
+                </div>
+
+                {/* Footer Status - Removed Dominant / Percentage Text */}
+                <div className="pt-2 border-t border-border/20 flex items-center justify-between text-[11px] text-muted-foreground font-mono">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#39FF14] animate-pulse" />
+                    <span>Real-Time Sync</span>
+                  </div>
+                  <span className="text-[11px] text-muted-foreground font-mono">
+                    {totalRepos} Repositories Synced
+                  </span>
                 </div>
               </div>
             </Reveal>

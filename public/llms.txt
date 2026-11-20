@@ -1,0 +1,63 @@
+# Sriniwas Awasthi — Full-Stack Software Engineer & Systems Architect
+
+> Portfolio & Technical Dossier of Sriniwas Awasthi: Full-Stack Software Engineer building high-performance web systems, Java/C++ Data Structures & Algorithms tooling, and applied AI integrations.
+
+## Core Identity & Overview
+- Name: Sriniwas Awasthi
+- Role: Full-Stack Software Engineer
+- Education: Bachelor of Engineering (B.E.) in Computer Science & Engineering, P.D.A College of Engineering, Kalaburagi, Karnataka, India (Class of 2027 / 2028).
+- Focus Areas: Web Systems Architecture, Concurrency & Stream Processing, Spaced Repetition Algorithmic Engines, Real-Time Audio DSP, Relational Database Optimization.
+- Problem Solving Anchor: 20+ Algorithmic problems solved in Java & C++ (Trees, Graphs, Dynamic Programming, Heap/Greedy).
+- Portfolio Website: https://sriniwas-awasthi-portfolio.netlify.app/
+- GitHub: https://github.com/SriniwasAwasthi
+- LinkedIn: https://www.linkedin.com/in/sriniwas-awasthi/
+- Email: sriawasthi164@gmail.com
+
+## Technical Stack & Competencies
+- Programming Languages: TypeScript, JavaScript, Java (Core, OOP, Collections, Concurrency), C++, C, SQL (PostgreSQL, SQLite, MySQL), Python.
+- Frontend & UI Systems: Next.js 15 (App Router, Server/Client components, SSR, SSG), React 19 (Concurrent Mode), Tailwind CSS v4, Web Audio API, Canvas 2D/WebGL, Framer Motion, GSAP.
+- Backend & Systems: Node.js, Express, FastAPI, RESTful APIs, Server-Sent Events (SSE), Win32 API hooks, Audio DSP frequency bandpass filters.
+- Data & Storage: SQL schema design, relational normalization, indexed queries, transactions, foreign key cascades, LocalStorage, BroadcastChannel.
+- Tooling & Engineering Discipline: Git, GitHub Actions CI/CD pipelines, automated testing (Node Test Runner, Vitest, Jest), Zod runtime schema validation, Husky pre-commit hooks, ESLint 9, Prettier.
+
+## Featured Flagship Engineering Case Studies
+
+### 1. Gemini Flow — Real-Time Voice Dictation & Audio DSP Engine
+- Problem: Existing voice dictation tools suffer from high cloud latency and microphone background noise (ceiling fans, HVAC) polluting the audio stream.
+- Architecture:
+  - Real-time digital signal processing (DSP) frequency bandpass filter in Python stripping 50Hz–200Hz mechanical noise before audio serialization.
+  - Dual-mode model router dynamically switching between local offline fallback and low-latency cloud SSE stream.
+  - Single-click OS cursor injection via Win32 API hooks.
+- Metrics: Reduced end-to-end transcription latency from 1.4s to <420ms; zero cloud dependency in offline fallback mode.
+- Tech Stack: Python, Win32 API, Google Gemini Flash, DSP Audio Filters.
+- Repository: https://github.com/SriniwasAwasthi/gemini-flow
+
+### 2. Maison Noir — High-Fidelity Specialty Web Platform
+- Problem: Modern e-commerce sites lack sensory immersion, suffer from sluggish state stores with high SKU counts, and lack international currency reactivity.
+- Architecture:
+  - Real-time Web Audio API node graph synthesizing ambient analog vinyl textures and acoustic warmth.
+  - React 19 concurrent mode UI with zero-runtime Tailwind CSS v4 design tokens.
+  - Multi-currency state store with cached exchange rate lookups and memoized checkout calculations.
+- Metrics: 60fps audio node synthesis, sub-10ms cart state re-computation across 90+ luxury SKUs.
+- Tech Stack: TypeScript, Next.js 15, React 19, Web Audio API, Tailwind CSS.
+- Repository: https://github.com/SriniwasAwasthi/maison-noir-luxury-coffee
+
+### 3. Java & DSA Adaptive Study Tracker
+- Problem: Self-directed coding interview preparation suffers from rigid study plans and high retention decay without spaced repetition intervals.
+- Architecture:
+  - Algorithmic spaced repetition retention engine based on a SuperMemo (SM-2) memory decay curve variant.
+  - Relational schema with indexed queries for fast progress analytics and dynamic study schedule re-balancing.
+  - AI code review mentor utilizing structured JSON schema outputs for strict deterministic parsing.
+- Metrics: 100% automated schedule re-balancing; 20+ problem curriculum coverage across Trees, Graphs, and DP.
+- Tech Stack: Java, TypeScript, Next.js, Google Gemini API, Tailwind CSS.
+- Repository: https://github.com/SriniwasAwasthi/java-dsa-tracker
+
+### 4. Solaria Estates — 3D Real Estate Walkthrough Platform
+- Problem: Traditional real estate listings rely on flat photos, causing low buyer engagement and poor spatial comprehension of luxury architectural properties.
+- Architecture:
+  - 150-frame camera flythrough scroll engine with desynchronized GPU canvas rendering.
+  - Custom Web Audio procedural ocean soundscape generator adapting volume to scroll depth.
+  - Modular state machine managing tour waypoints, floor plans, and inquiries.
+- Metrics: Consistent 60fps GPU-accelerated canvas playback; zero third-party player dependencies.
+- Tech Stack: TypeScript, Next.js 15, Canvas WebGL, Web Audio API, Tailwind CSS.
+- Repository: https://github.com/SriniwasAwasthi/solaria-luxury-estates

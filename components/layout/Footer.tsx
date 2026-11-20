@@ -81,7 +81,7 @@ export function Footer() {
               <Heart className="w-3.5 h-3.5 text-[#39FF14] fill-[#39FF14]" />
               <span>by Sriniwas</span>
             </div>
-            <p>&copy; {currentYear} Sriniwas. All rights reserved.</p>
+            <p suppressHydrationWarning>&copy; {currentYear} Sriniwas. All rights reserved.</p>
           </div>
         </div>
       </div>

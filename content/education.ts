@@ -15,10 +15,10 @@ export interface CourseEntry {
 
 export const educationInfo = {
   degree: 'Bachelor of Engineering (B.E.)',
-  field: 'Computer Science Engineering (2nd Year)',
+  field: 'Computer Science & Engineering',
   institution: 'P.D.A College of Engineering',
   location: 'Kalaburagi, Karnataka',
-  duration: '2024 — 2028 (2nd Year Student)',
+  duration: 'Undergraduate Program (Expected 2027 / 2028)',
 };
 
 /** Relevant coursework list displayed on the education card */

@@ -36,7 +36,11 @@ export async function GET() {
         if (Array.isArray(reposData) && reposData.length > 0) {
           publicRepos = reposData.length;
           fetchedRepos = reposData.map((repo: Record<string, any>) => {
-            const lang = repo.language || 'Code';
+            const lang =
+              repo.language ||
+              (repo.name.toLowerCase() === GITHUB_USERNAME.toLowerCase()
+                ? 'Markdown / Docs'
+                : 'Other');
             const dateObj = new Date(repo.updated_at || Date.now());
             const formattedDate = `Updated ${dateObj.toLocaleDateString('en-US', {
               month: 'short',

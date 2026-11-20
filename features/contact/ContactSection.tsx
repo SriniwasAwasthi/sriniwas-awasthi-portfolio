@@ -52,7 +52,7 @@ export function ContactSection() {
         message: formData.message,
       }).toString();
 
-      const res = await fetch('/', {
+      const res = await fetch('/__forms.html', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: encoded,
@@ -219,8 +219,6 @@ export function ContactSection() {
                   <form
                     name="contact"
                     method="POST"
-                    data-netlify="true"
-                    netlify-honeypot="bot-field"
                     onSubmit={handleSubmit}
                     className="space-y-4"
                   >

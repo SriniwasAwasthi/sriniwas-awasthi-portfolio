@@ -87,22 +87,22 @@ In addition to the 4 Flagships, all secondary repositories in the expandable sho
 
 ```mermaid
 flowchart TD
-    subgraph Client_Layer ["Client Layer (Browser & Edge Viewports)"]
-        A["👤 Visitor / Tech Recruiter"] --> B["⚡ Next.js 15 App Router & React 19"]
-        B --> C["🎨 Glassmorphic UI & 3D Interactive Canvas"]
+    subgraph Client_Layer ["Client Layer: Browser and Edge Viewports"]
+        A["👤 Visitor or Tech Recruiter"] --> B["⚡ Next.js 15 App Router and React 19"]
+        B --> C["🎨 Glassmorphic UI and 3D Interactive Canvas"]
         B --> D["📱 5-Pillar Architectural Modal Viewer"]
     end
 
-    subgraph Service_Layer ["Service & Edge Execution Layer"]
+    subgraph Service_Layer ["Service and Edge Execution Layer"]
         B --> E["📈 Google Analytics 4 (GA4 Client Tag)"]
-        B --> F["📬 In-Browser Netlify Forms & Direct Gmail Launcher"]
+        B --> F["📬 In-Browser Netlify Forms and Direct Gmail Launcher"]
         B --> G["🔄 Next.js Edge Route: /api/github"]
     end
 
-    subgraph Data_Layer ["Data & External Persistence"]
-        G -->|"s-maxage=300 (5-min Cache)"| H["🐙 GitHub REST API (Live Stats & Contributions)"]
-        F --> I["☁️ Netlify Cloud Storage & Email Forwarding"]
-        D --> J["📜 Static Architectural Catalog (Flagships & Secondary Repos)"]
+    subgraph Data_Layer ["Data and External Persistence"]
+        G -- "s-maxage=300 (5-min Cache)" --> H["🐙 GitHub REST API (Live Stats and Contributions)"]
+        F --> I["☁️ Netlify Cloud Storage and Email Forwarding"]
+        D --> J["📜 Static Architectural Catalog (Flagships and Secondary Repos)"]
     end
 ```
 

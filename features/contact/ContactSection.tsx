@@ -118,7 +118,7 @@ export function ContactSection() {
                     <Check className="w-4 h-4 text-[#39FF14]" />
                   </div>
                   <span className="font-semibold text-foreground/90">
-                    Available for 2–6 Month Software Engineering Internships (Summer &amp; Fall 2025/2026)
+                    Available for 2–6 Month Software Engineering Internships (Summer &amp; Fall 2027)
                   </span>
                 </div>
               </div>

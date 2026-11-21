@@ -198,7 +198,7 @@ export function GithubSection() {
                       {totalContributions} contributions in the last year
                     </span>
                     <span className="text-[11px] text-muted-foreground font-mono">
-                      Sep 2025 – Sep 2026
+                      Rolling 52-Week Activity
                     </span>
                   </div>
 

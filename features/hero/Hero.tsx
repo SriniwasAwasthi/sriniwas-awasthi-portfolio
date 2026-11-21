@@ -73,7 +73,7 @@ export function Hero() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#5cff3d] opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#5cff3d]"></span>
             </span>
-            <span className="font-bold">Available for Summer &amp; Fall 2025/2026 Internships</span>
+            <span className="font-bold">Available for Summer &amp; Fall 2027 Internships</span>
             <span className="hidden sm:inline-block text-[#5cff3d]/50">•</span>
             <span className="hidden sm:inline-block font-mono text-[11px] text-[#5cff3d]/90">
               Bangalore · Hyderabad · Pune · Remote
@@ -295,7 +295,7 @@ export function Hero() {
                         </span>
                         ,{'\n'}
                         {'  '}status:{' '}
-                        <span className="text-[#B7FFAE]">&quot;Open to Internships (Summer/Fall 2025/2026)&quot;</span>
+                        <span className="text-[#B7FFAE]">&quot;Open to Internships (Summer/Fall 2027)&quot;</span>
                         {'\n'}&#125;;
                       </code>
                     </pre>

@@ -8,7 +8,7 @@ test('Contact Form Resilience: verifies honest error handling and no fake succes
   const contactFilePath = path.resolve('features/contact/ContactSection.tsx');
   const source = fs.readFileSync(contactFilePath, 'utf-8');
 
-  // Verify catch block does NOT set submitted=true (the bug that was fixed)
+  // Verify catch block does NOT set submitted=true
   assert.doesNotMatch(
     source,
     /catch\s*\([^)]*\)\s*\{[^}]*setSubmitted\s*\(\s*true\s*\)/s,
@@ -36,5 +36,39 @@ test('Contact Form Resilience: verifies honest error handling and no fake succes
   assert.ok(
     siteConfig.links.email.includes('@'),
     'siteConfig.links.email must contain a valid domain'
+  );
+});
+
+test('Contact Form Cross-Device & Network Interruption: verifies no autofill traps and network error handling', () => {
+  const contactFilePath = path.resolve('features/contact/ContactSection.tsx');
+  const source = fs.readFileSync(contactFilePath, 'utf-8');
+
+  // Verify bot-field honeypot is completely removed so mobile autofill never gets dropped
+  assert.doesNotMatch(
+    source,
+    /bot-field/,
+    'bot-field honeypot must be completely removed to prevent mobile autofill drops'
+  );
+
+  // Verify exact required error message
+  assert.ok(
+    source.includes("There is a network issue; I can't send the data."),
+    'Must display exact error message: "There is a network issue; I can\'t send the data."'
+  );
+
+  // Verify offline navigator check and AbortController timeout handling
+  assert.ok(
+    source.includes('navigator.onLine'),
+    'Must check navigator.onLine for immediate network disconnection detection'
+  );
+  assert.ok(
+    source.includes('AbortController'),
+    'Must utilize AbortController to handle network delays and slow connection timeouts'
+  );
+
+  // Verify dual-path endpoint fallback
+  assert.ok(
+    source.includes('/__forms.html') && source.includes("fetch('/'"),
+    'Must support dual-path endpoints (/__forms.html with fallback to /) for cross-device CDNs'
   );
 });

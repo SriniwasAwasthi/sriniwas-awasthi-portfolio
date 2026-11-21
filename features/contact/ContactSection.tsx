@@ -26,7 +26,6 @@ const INITIAL_FORM_DATA = {
   email: '',
   subject: '',
   message: '',
-  'bot-field': '',
 };
 
 export function ContactSection() {
@@ -51,17 +50,17 @@ export function ContactSection() {
   const directMailtoUrl = `mailto:${emailAddress}?subject=${encodeURIComponent(
     formData.subject.trim() || 'Software Engineering Inquiry'
   )}&body=${encodeURIComponent(
-    `Hi Sriniwas,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    `Hi Sriniwas,\n\nName: ${formData.name.trim()}\nEmail: ${formData.email.trim()}\n\nMessage:\n${formData.message.trim()}`
   )}`;
 
   const directGmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${emailAddress}&su=${encodeURIComponent(
     formData.subject.trim() || 'Software Engineering Inquiry'
   )}&body=${encodeURIComponent(
-    `Hi Sriniwas,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+    `Hi Sriniwas,\n\nName: ${formData.name.trim()}\nEmail: ${formData.email.trim()}\n\nMessage:\n${formData.message.trim()}`
   )}`;
 
   const copyDraft = () => {
-    const draftText = `To: ${emailAddress}\nSubject: ${formData.subject}\nFrom: ${formData.name} (${formData.email})\n\nMessage:\n${formData.message}`;
+    const draftText = `To: ${emailAddress}\nSubject: ${formData.subject.trim()}\nFrom: ${formData.name.trim()} (${formData.email.trim()})\n\nMessage:\n${formData.message.trim()}`;
     navigator.clipboard.writeText(draftText);
     setDraftCopied(true);
     setTimeout(() => setDraftCopied(false), 2500);
@@ -75,48 +74,83 @@ export function ContactSection() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (formData['bot-field']) return; // Bot trapped
+
+    // 1. Immediate offline check for Wi-Fi / mobile data loss
+    if (typeof navigator !== 'undefined' && !navigator.onLine) {
+      setErrorMessage("There is a network issue; I can't send the data.");
+      setIsSubmitting(false);
+      return;
+    }
 
     setIsSubmitting(true);
     setErrorMessage(null);
     setSubmittedName(formData.name.trim());
 
+    // 2. AbortController with 10-second timeout to catch slow network or Wi-Fi delay
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => {
+      controller.abort();
+    }, 10000);
+
     try {
-      // Encode form data for Netlify Forms POST to '/__forms.html'
-      const encoded = new URLSearchParams({
+      // Encode form data with clean trimming for cross-device consistency
+      const payload = new URLSearchParams({
         'form-name': 'contact',
-        name: formData.name,
-        email: formData.email,
-        subject: formData.subject,
-        message: formData.message,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        subject: formData.subject.trim(),
+        message: formData.message.trim(),
       }).toString();
 
-      const res = await fetch('/__forms.html', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encoded,
-      });
+      // Dual-endpoint submission: Primary /__forms.html with fallback to /
+      let res: Response | null = null;
+      try {
+        res = await fetch('/__forms.html', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Accept: 'application/json, text/plain, */*',
+          },
+          body: payload,
+          signal: controller.signal,
+        });
+      } catch (primaryErr: unknown) {
+        if (primaryErr instanceof DOMException && primaryErr.name === 'AbortError') {
+          throw primaryErr;
+        }
+        // Fallback to root path if /__forms.html fails on certain mobile CDNs
+        res = await fetch('/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Accept: 'application/json, text/plain, */*',
+          },
+          body: payload,
+          signal: controller.signal,
+        });
+      }
 
-      if (res.ok) {
+      clearTimeout(timeoutId);
+
+      if (res && (res.ok || res.status === 200 || res.status === 302 || res.status === 303)) {
         setSubmitted(true);
         setErrorMessage(null);
         setFormData(INITIAL_FORM_DATA);
         if (formRef.current) formRef.current.reset();
       } else {
-        throw new Error(
-          `Form delivery failed (HTTP ${res.status}). Network or server connection issue.`
-        );
+        throw new Error("There is a network issue; I can't send the data.");
       }
     } catch (err: unknown) {
-      // Never fake success: preserve user's typed message and show actionable email fallback
-      const errorDetail =
-        err instanceof Error
-          ? err.message
-          : 'Unable to deliver message over network. Your message is preserved below.';
+      clearTimeout(timeoutId);
       setSubmitted(false);
-      setErrorMessage(
-        `${errorDetail} Please use the direct email or Gmail shortcuts below so your message reaches me immediately.`
-      );
+
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        setErrorMessage(
+          "There is a network issue; I can't send the data. Request timed out due to network delay."
+        );
+      } else {
+        setErrorMessage("There is a network issue; I can't send the data.");
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -272,22 +306,14 @@ export function ContactSection() {
                     ref={formRef}
                     name="contact"
                     method="POST"
-                    autoComplete="off"
+                    action="/__forms.html"
+                    data-netlify="true"
+                    autoComplete="on"
                     onSubmit={handleSubmit}
                     className="space-y-4"
                   >
-                    {/* Hidden Netlify Inputs */}
+                    {/* Hidden Netlify Form Identity Input */}
                     <input type="hidden" name="form-name" value="contact" />
-                    <p className="hidden">
-                      <label>
-                        Don’t fill this out if you’re human:{' '}
-                        <input
-                          name="bot-field"
-                          value={formData['bot-field']}
-                          onChange={handleChange}
-                        />
-                      </label>
-                    </p>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       {/* Name Field */}

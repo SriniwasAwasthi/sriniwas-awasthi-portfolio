@@ -1,7 +1,21 @@
 'use client';
 
 import * as React from 'react';
-import { Mail, Github, Linkedin, MapPin, Download, Check, Send, Loader2, Heart } from 'lucide-react';
+import {
+  Mail,
+  Github,
+  Linkedin,
+  MapPin,
+  Download,
+  Check,
+  Send,
+  Loader2,
+  Heart,
+  AlertCircle,
+  Copy,
+  ExternalLink,
+  RefreshCw,
+} from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Reveal } from '@/components/animations/Reveal';
@@ -18,6 +32,7 @@ const INITIAL_FORM_DATA = {
 export function ContactSection() {
   const formRef = React.useRef<HTMLFormElement>(null);
   const [copied, setCopied] = React.useState(false);
+  const [draftCopied, setDraftCopied] = React.useState(false);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [submitted, setSubmitted] = React.useState(false);
   const [submittedName, setSubmittedName] = React.useState('');
@@ -33,8 +48,29 @@ export function ContactSection() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const directMailtoUrl = `mailto:${emailAddress}?subject=${encodeURIComponent(
+    formData.subject.trim() || 'Software Engineering Inquiry'
+  )}&body=${encodeURIComponent(
+    `Hi Sriniwas,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+  )}`;
+
+  const directGmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${emailAddress}&su=${encodeURIComponent(
+    formData.subject.trim() || 'Software Engineering Inquiry'
+  )}&body=${encodeURIComponent(
+    `Hi Sriniwas,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
+  )}`;
+
+  const copyDraft = () => {
+    const draftText = `To: ${emailAddress}\nSubject: ${formData.subject}\nFrom: ${formData.name} (${formData.email})\n\nMessage:\n${formData.message}`;
+    navigator.clipboard.writeText(draftText);
+    setDraftCopied(true);
+    setTimeout(() => setDraftCopied(false), 2500);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    // Clear error once user resumes typing
+    if (errorMessage) setErrorMessage(null);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -63,16 +99,24 @@ export function ContactSection() {
 
       if (res.ok) {
         setSubmitted(true);
+        setErrorMessage(null);
         setFormData(INITIAL_FORM_DATA);
         if (formRef.current) formRef.current.reset();
       } else {
-        throw new Error('Network response was not ok');
+        throw new Error(
+          `Form delivery failed (HTTP ${res.status}). Network or server connection issue.`
+        );
       }
-    } catch (_err) {
-      // Fallback: If running locally without Netlify server handling, show success state gracefully
-      setSubmitted(true);
-      setFormData(INITIAL_FORM_DATA);
-      if (formRef.current) formRef.current.reset();
+    } catch (err: unknown) {
+      // Never fake success: preserve user's typed message and show actionable email fallback
+      const errorDetail =
+        err instanceof Error
+          ? err.message
+          : 'Unable to deliver message over network. Your message is preserved below.';
+      setSubmitted(false);
+      setErrorMessage(
+        `${errorDetail} Please use the direct email or Gmail shortcuts below so your message reaches me immediately.`
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -333,6 +377,63 @@ export function ContactSection() {
                       />
                     </div>
 
+                    {/* Error Banner & Actionable Fallbacks */}
+                    {errorMessage && (
+                      <div className="p-4 rounded-xl border border-rose-500/40 bg-rose-500/10 text-xs space-y-3 animate-fadeIn">
+                        <div className="flex items-start gap-2.5">
+                          <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                          <div className="space-y-1">
+                            <p className="font-semibold text-rose-300">Message Delivery Issue</p>
+                            <p className="text-rose-200/90 leading-relaxed font-sans">
+                              {errorMessage}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Instant Fallback Options */}
+                        <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-rose-500/20 font-mono text-[11px]">
+                          <a
+                            href={directGmailUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-rose-500/25 hover:bg-rose-500/40 text-rose-100 font-semibold transition-colors"
+                            title="Open Gmail with your message pre-filled"
+                          >
+                            <ExternalLink className="w-3 h-3" />
+                            <span>Open Pre-filled in Gmail</span>
+                          </a>
+
+                          <a
+                            href={directMailtoUrl}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary/80 hover:bg-secondary text-foreground font-semibold transition-colors"
+                            title="Open your default email client with your message pre-filled"
+                          >
+                            <Mail className="w-3 h-3 text-[#39FF14]" />
+                            <span>Default Mail App</span>
+                          </a>
+
+                          <button
+                            type="button"
+                            onClick={copyDraft}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border/80 hover:bg-secondary/50 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                            title="Copy your message details to clipboard"
+                          >
+                            {draftCopied ? (
+                              <>
+                                <Check className="w-3 h-3 text-emerald-400" />
+                                <span className="text-emerald-400">Draft Copied!</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-3 h-3" />
+                                <span>Copy Draft Text</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
                     {/* Submit Button */}
                     <button
                       type="submit"
@@ -343,6 +444,11 @@ export function ContactSection() {
                         <>
                           <Loader2 className="w-4 h-4 animate-spin text-[#030503]" />
                           <span>Sending Your Message...</span>
+                        </>
+                      ) : errorMessage ? (
+                        <>
+                          <RefreshCw className="w-4 h-4 text-[#030503]" />
+                          <span>Retry Sending Form</span>
                         </>
                       ) : (
                         <>

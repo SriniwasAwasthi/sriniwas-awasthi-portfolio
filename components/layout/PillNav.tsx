@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState, ReactNode } from 'react';
 import Link from 'next/link';
 import { gsap } from 'gsap';
+import { Menu, X, ArrowRight, FileText } from 'lucide-react';
 import './PillNav.css';
 
 interface PillNavItem {
@@ -171,56 +172,91 @@ const PillNav = ({
     return;
   };
 
-  const toggleMobileMenu = () => {
-    const newState = !isMobileMenuOpen;
-    setIsMobileMenuOpen(newState);
-
-    const hamburger = hamburgerRef.current;
+  const openMobileMenu = () => {
+    setIsMobileMenuOpen(true);
     const menu = mobileMenuRef.current;
-
-    if (hamburger) {
-      const lines = hamburger.querySelectorAll('.hamburger-line');
-      if (newState) {
-        gsap.to(lines[0], { rotation: 45, y: 3, duration: 0.3, ease });
-        gsap.to(lines[1], { rotation: -45, y: -3, duration: 0.3, ease });
-      } else {
-        gsap.to(lines[0], { rotation: 0, y: 0, duration: 0.3, ease });
-        gsap.to(lines[1], { rotation: 0, y: 0, duration: 0.3, ease });
-      }
-    }
-
     if (menu) {
-      if (newState) {
-        gsap.set(menu, { visibility: 'visible' });
-        gsap.fromTo(
-          menu,
-          { opacity: 0, y: 10, scaleY: 1 },
-          {
-            opacity: 1,
-            y: 0,
-            scaleY: 1,
-            duration: 0.3,
-            ease,
-            transformOrigin: 'top center',
-          },
-        );
-      } else {
-        gsap.to(menu, {
-          opacity: 0,
-          y: 10,
-          scaleY: 1,
-          duration: 0.2,
-          ease,
-          transformOrigin: 'top center',
-          onComplete: () => {
-            gsap.set(menu, { visibility: 'hidden' });
-          },
-        });
-      }
+      gsap.killTweensOf(menu);
+      gsap.set(menu, { visibility: 'visible' });
+      gsap.fromTo(
+        menu,
+        { opacity: 0, y: -10, scale: 0.98 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.25,
+          ease: 'power2.out',
+        },
+      );
     }
-
     onMobileMenuClick?.();
   };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+    const menu = mobileMenuRef.current;
+    if (menu) {
+      gsap.killTweensOf(menu);
+      gsap.to(menu, {
+        opacity: 0,
+        y: -10,
+        scale: 0.98,
+        duration: 0.2,
+        ease: 'power2.in',
+        onComplete: () => {
+          gsap.set(menu, { visibility: 'hidden' });
+        },
+      });
+    }
+  };
+
+  const toggleMobileMenu = () => {
+    if (isMobileMenuOpen) {
+      closeMobileMenu();
+    } else {
+      openMobileMenu();
+    }
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isMobileMenuOpen) {
+        closeMobileMenu();
+      }
+    };
+    const handleResize = () => {
+      if (window.innerWidth > 768 && isMobileMenuOpen) {
+        closeMobileMenu();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent | TouchEvent) => {
+      if (
+        isMobileMenuOpen &&
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(e.target as Node) &&
+        hamburgerRef.current &&
+        !hamburgerRef.current.contains(e.target as Node)
+      ) {
+        closeMobileMenu();
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('touchstart', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('touchstart', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
 
   const isExternalLink = (href: string) =>
     href.startsWith('http://') ||
@@ -344,39 +380,107 @@ const PillNav = ({
         <button
           className="mobile-menu-button mobile-only"
           onClick={toggleMobileMenu}
-          aria-label="Toggle menu"
+          aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          aria-expanded={isMobileMenuOpen}
           ref={hamburgerRef}
         >
-          <span className="hamburger-line" />
-          <span className="hamburger-line" />
+          {isMobileMenuOpen ? (
+            <X className="w-5 h-5 text-[#39FF14] transition-all duration-200" />
+          ) : (
+            <Menu className="w-5 h-5 text-[#39FF14] transition-all duration-200" />
+          )}
         </button>
       </nav>
 
-      <div className="mobile-menu-popover mobile-only" ref={mobileMenuRef} style={cssVars}>
+      {/* Backdrop overlay for mobile menu */}
+      {isMobileMenuOpen && (
+        <div
+          className="mobile-menu-backdrop fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
+          onClick={closeMobileMenu}
+          aria-hidden="true"
+        />
+      )}
+
+      <div
+        className={`mobile-menu-popover ${isMobileMenuOpen ? 'is-open' : ''}`}
+        ref={mobileMenuRef}
+      >
+        <div className="mobile-menu-header">
+          <span className="text-[11px] font-mono font-bold tracking-widest uppercase text-[#39FF14] flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-[#39FF14] animate-pulse" />
+            Navigation
+          </span>
+          <span className="text-[10px] font-mono text-muted-foreground uppercase">
+            Menu
+          </span>
+        </div>
+
         <ul className="mobile-menu-list">
-          {items.map((item, i) => (
-            <li key={item.href || `mobile-item-${i}`}>
-              {isRouterLink(item.href) ? (
-                <Link
-                  href={item.href}
-                  className={`mobile-menu-link${activeHref === item.href ? ' is-active' : ''}`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.label}
-                </Link>
-              ) : (
-                <a
-                  href={item.href}
-                  className={`mobile-menu-link${activeHref === item.href ? ' is-active' : ''}`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {item.label}
-                </a>
-              )}
-            </li>
-          ))}
-          {/* Add a slot for mobile actions if needed */}
+          {items.map((item, i) => {
+            const isActive = activeHref === item.href;
+            const itemLabel = item.label.toUpperCase();
+            return (
+              <li key={item.href || `mobile-item-${i}`}>
+                {isRouterLink(item.href) ? (
+                  <Link
+                    href={item.href}
+                    className={`mobile-menu-link${isActive ? ' is-active' : ''}`}
+                    onClick={closeMobileMenu}
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <span className="text-[10px] font-mono text-[#39FF14]/70">
+                        0{i + 1}
+                      </span>
+                      <span className="font-heading font-extrabold tracking-wider">{itemLabel}</span>
+                    </span>
+                    {isActive && (
+                      <span className="w-2 h-2 rounded-full bg-[#39FF14] shadow-[0_0_8px_#39FF14]" />
+                    )}
+                  </Link>
+                ) : (
+                  <a
+                    href={item.href}
+                    className={`mobile-menu-link${isActive ? ' is-active' : ''}`}
+                    onClick={closeMobileMenu}
+                  >
+                    <span className="flex items-center gap-2.5">
+                      <span className="text-[10px] font-mono text-[#39FF14]/70">
+                        0{i + 1}
+                      </span>
+                      <span className="font-heading font-extrabold tracking-wider">{itemLabel}</span>
+                    </span>
+                    {isActive && (
+                      <span className="w-2 h-2 rounded-full bg-[#39FF14] shadow-[0_0_8px_#39FF14]" />
+                    )}
+                  </a>
+                )}
+              </li>
+            );
+          })}
         </ul>
+
+        {/* Mobile Action CTAs */}
+        <div className="mobile-menu-actions">
+          <a
+            href="/SRINIWAS_Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            download="Sriniwas_Awasthi_Resume.pdf"
+            className="mobile-action-btn mobile-action-resume"
+            onClick={closeMobileMenu}
+          >
+            <FileText className="w-3.5 h-3.5" />
+            Resume
+          </a>
+          <a
+            href="#contact"
+            className="mobile-action-btn mobile-action-contact"
+            onClick={closeMobileMenu}
+          >
+            Contact
+            <ArrowRight className="w-3.5 h-3.5" />
+          </a>
+        </div>
       </div>
     </div>
   );

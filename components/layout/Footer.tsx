@@ -9,7 +9,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-[#39FF14]/20 bg-[#030503]/90 backdrop-blur-md relative z-10">
+    <footer className="border-t border-[#39FF14]/20 bg-[#030503]/90 backdrop-blur-md relative z-10 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 py-12 flex flex-col md:flex-row items-center justify-between gap-8">
         {/* Left Side - Brand & Description */}
         <div className="flex flex-col items-center md:items-start gap-2.5 text-center md:text-left">

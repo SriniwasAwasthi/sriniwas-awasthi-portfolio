@@ -149,7 +149,7 @@ export function SkillsSection() {
   return (
     <section
       id="skills"
-      className="relative py-24 px-6 md:px-12 lg:px-24 border-t border-border/20"
+      className="relative py-24 px-6 md:px-12 lg:px-24 border-t border-border/20 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
@@ -191,7 +191,7 @@ export function SkillsSection() {
                 </p>
               </div>
 
-              <div className="flex items-center gap-4 shrink-0">
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 shrink-0">
                 <a
                   href="https://github.com/SriniwasAwasthi/java-dsa-tracker"
                   target="_blank"

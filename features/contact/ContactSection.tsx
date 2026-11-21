@@ -81,7 +81,7 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative py-24 px-6 md:px-12 lg:px-24 bg-secondary/5 dark:bg-transparent border-t border-border/20"
+      className="relative py-24 px-6 md:px-12 lg:px-24 bg-secondary/5 dark:bg-transparent border-t border-border/20 overflow-hidden"
     >
       {/* Background radial glow */}
       <div className="absolute left-1/2 bottom-0 -translate-x-1/2 w-[35rem] h-[35rem] rounded-full bg-[#39FF14]/8 blur-[130px] pointer-events-none" />

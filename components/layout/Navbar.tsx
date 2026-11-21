@@ -129,10 +129,10 @@ export function Navbar() {
           activeHref={activeSection}
           rightActions={rightActions}
           ease="power2.easeOut"
-          baseColor="hsl(var(--background))"
-          pillColor="hsl(var(--secondary))"
-          pillTextColor="hsl(var(--muted-foreground))"
-          hoveredPillTextColor="hsl(var(--foreground))"
+          baseColor="var(--background)"
+          pillColor="var(--secondary)"
+          pillTextColor="var(--muted-foreground)"
+          hoveredPillTextColor="var(--foreground)"
           initialLoadAnimation={true}
         />
       </div>

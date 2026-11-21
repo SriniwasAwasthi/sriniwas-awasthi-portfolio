@@ -22,7 +22,7 @@ export default function Home() {
       <Navbar />
 
       {/* Main experience */}
-      <main id="main-content" className="flex flex-col w-full min-h-screen">
+      <main id="main-content" className="flex flex-col w-full min-h-screen overflow-x-hidden">
         {/* Above the fold — static / SSR */}
         <Hero />
 

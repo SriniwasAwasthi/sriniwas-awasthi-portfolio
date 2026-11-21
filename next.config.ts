@@ -46,7 +46,6 @@ const nextConfig: NextConfig = {
   },
 
   // Allow dev origin from network
-  // @ts-expect-error allowedDevOrigins is valid in Next.js 15
   allowedDevOrigins: ['192.168.29.197', 'localhost', '127.0.0.1'],
 
   // Experimental: faster builds

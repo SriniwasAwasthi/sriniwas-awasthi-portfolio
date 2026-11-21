@@ -31,7 +31,7 @@ export function AchievementsSection() {
   return (
     <section
       id="achievements"
-      className="relative py-24 px-6 md:px-12 lg:px-24 border-t border-border/20"
+      className="relative py-24 px-6 md:px-12 lg:px-24 border-t border-border/20 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}

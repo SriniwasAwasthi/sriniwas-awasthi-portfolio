@@ -195,7 +195,7 @@ export function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="relative py-24 px-6 md:px-12 lg:px-24 bg-secondary/5 dark:bg-transparent border-t border-border/20"
+      className="relative py-24 px-6 md:px-12 lg:px-24 bg-secondary/5 dark:bg-transparent border-t border-border/20 overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}

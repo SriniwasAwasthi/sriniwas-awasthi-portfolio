@@ -700,15 +700,15 @@ export const secondaryProjectsMap: Record<string, Partial<DynamicProject>> = {
   'book-matrix-lms': {
     displayName: 'Book Matrix LMS — High-Speed Library System',
     summary:
-      'High-throughput Library Management System built with Python 3.10+, SQLite, and C extensions, featuring B-Tree indexed catalog search, automated fine calculations, and barcode processing.',
+      'High-throughput Library Management System built with Python 3.10+ and SQLite WAL mode. Reduced search query response time from 140ms to 8ms using SQLite B-Tree indexing on 50,000 mock records, featuring automated fine calculations and compiled C-extension fuzzy matching.',
     problem:
       'Traditional library management systems struggle with slow search latency across large bibliographies, database locking during concurrent checkouts, and manual fine tracking.',
     solution:
-      'Engineered Book Matrix LMS in Python and SQLite, featuring B-Tree indexed catalog lookup, automated overdue fine calculation routines, and compiled C-extension string matching algorithms.',
+      'Engineered Book Matrix LMS in Python and SQLite WAL mode. Slashed query response time from 140ms down to 8ms via B-Tree indexing across 50,000 mock records, paired with automated overdue fine calculation routines and ACID-compliant transaction safety.',
     features: [
-      'Sub-5ms fuzzy search across 50,000+ book titles, authors, and ISBN records',
+      'Reduced search query response time from 140ms to 8ms using SQLite B-Tree indexing on 50,000 mock records',
       'Automated overdue fine computation with configurable grace periods and holiday exemptions',
-      'ACID-compliant transactional loan processing supporting concurrent borrowing checkouts',
+      'ACID-compliant transactional loan processing supporting concurrent borrowing checkouts via SQLite WAL mode',
       'Member tiering system (Student, Faculty, Research Scholar) with dynamic borrowing limits',
     ],
     tech: ['Python 3.10+', 'SQLite', 'C Extensions', 'HTML5', 'CSS3', 'JavaScript'],

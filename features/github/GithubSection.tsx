@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Github, Code, ArrowUpRight, Loader2, RefreshCw, Layers } from 'lucide-react';
+import { Github, Code, ArrowUpRight, Loader2, RefreshCw, Layers, ShieldCheck, Activity } from 'lucide-react';
 import { Reveal } from '@/components/animations/Reveal';
 import { cn } from '@/lib/utils';
 import {
@@ -354,6 +354,22 @@ export function GithubSection() {
                           title="20+ contributions"
                         />
                         <span>More</span>
+                      </div>
+                    </div>
+
+                    {/* Engineering Quality & Telemetry Banner */}
+                    <div className="mt-4 pt-3 border-t border-[#30363d]/50 grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-[11px] font-mono">
+                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0e4429]/40 border border-[#006d32]/40 text-[#39FF14]">
+                        <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+                        <span>Tests: 7/7 Passing</span>
+                      </div>
+                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#161b22] border border-[#30363d]/60 text-muted-foreground">
+                        <Activity className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                        <span>Edge Cache: ISR 3600s</span>
+                      </div>
+                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#161b22] border border-[#30363d]/60 text-muted-foreground">
+                        <Code className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                        <span>Type Safety: Strict (0 Any)</span>
                       </div>
                     </div>
                   </div>

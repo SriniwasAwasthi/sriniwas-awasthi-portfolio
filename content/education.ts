@@ -18,7 +18,7 @@ export const educationInfo = {
   field: 'Computer Science & Engineering',
   institution: 'P.D.A College of Engineering',
   location: 'Kalaburagi, Karnataka',
-  duration: 'Undergraduate Program (Expected 2027 / 2028)',
+  duration: 'Undergraduate Program (Expected June 2028)',
 };
 
 /** Relevant coursework list displayed on the education card */

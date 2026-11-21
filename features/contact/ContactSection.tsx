@@ -17,7 +17,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { cn, copyToClipboard } from '@/lib/utils';
 import { Reveal } from '@/components/animations/Reveal';
 import { siteConfig } from '@/config/site';
 
@@ -41,10 +41,12 @@ export function ContactSection() {
 
   const emailAddress = siteConfig.links.email.replace('mailto:', '');
 
-  const copyEmail = () => {
-    navigator.clipboard.writeText(emailAddress);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const copyEmail = async () => {
+    const success = await copyToClipboard(emailAddress);
+    if (success) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   const directMailtoUrl = `mailto:${emailAddress}?subject=${encodeURIComponent(
@@ -59,11 +61,13 @@ export function ContactSection() {
     `Hi Sriniwas,\n\nName: ${formData.name.trim()}\nEmail: ${formData.email.trim()}\n\nMessage:\n${formData.message.trim()}`
   )}`;
 
-  const copyDraft = () => {
+  const copyDraft = async () => {
     const draftText = `To: ${emailAddress}\nSubject: ${formData.subject.trim()}\nFrom: ${formData.name.trim()} (${formData.email.trim()})\n\nMessage:\n${formData.message.trim()}`;
-    navigator.clipboard.writeText(draftText);
-    setDraftCopied(true);
-    setTimeout(() => setDraftCopied(false), 2500);
+    const success = await copyToClipboard(draftText);
+    if (success) {
+      setDraftCopied(true);
+      setTimeout(() => setDraftCopied(false), 2500);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

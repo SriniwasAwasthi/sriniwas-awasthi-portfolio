@@ -61,12 +61,13 @@ export function PhilosophySection() {
           </div>
         </Reveal>
 
-        {/* Stack Container */}
-        <div className="w-full max-w-xl mx-auto h-[260px] relative py-4">
+        {/* Stack Container with Mobile-Adaptive Sizing */}
+        <div className="w-full max-w-xl mx-auto h-[310px] sm:h-[280px] md:h-[260px] relative py-4">
           <Stack
             randomRotation={true}
             sensitivity={150}
             sendToBackOnClick={true}
+            mobileClickOnly={true}
             autoplay={false}
             cards={cards.map((card, index) => (
               <div

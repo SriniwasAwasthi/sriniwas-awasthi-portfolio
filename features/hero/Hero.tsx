@@ -2,9 +2,9 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { ArrowRight, Github, Linkedin, Mail, Code2, Terminal, Check, ShieldCheck } from 'lucide-react';
+import { ArrowRight, Github, Linkedin, Mail, Code2, Terminal, Check, ShieldCheck, FileText } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
+import { cn, copyToClipboard } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMotionPresets } from '@/components/animations/MotionPresets';
 import { siteConfig } from '@/config/site';
@@ -31,11 +31,13 @@ export function Hero() {
       .catch(() => {});
   }, []);
 
-  const copyEmail = () => {
+  const copyEmail = async () => {
     const emailAddress = siteConfig.links.email.replace('mailto:', '');
-    navigator.clipboard.writeText(emailAddress);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    const success = await copyToClipboard(emailAddress);
+    if (success) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
@@ -87,7 +89,7 @@ export function Hero() {
               title="Verified by automated Node.js test harness (tests/*.test.mjs)"
             >
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-              <span>CI/CD: 7/7 Passing Tests (100% Validated)</span>
+              <span>CI/CD: 10/10 Passing Tests (100% Validated)</span>
             </motion.div>
           </div>
 
@@ -138,6 +140,20 @@ export function Hero() {
               View My Projects
               <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
+
+            <a
+              href="/SRINIWAS_Resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              download="Sriniwas_Awasthi_Resume.pdf"
+              className={cn(
+                buttonVariants({ variant: 'outline', size: 'lg' }),
+                'w-full sm:w-auto rounded-full text-sm font-semibold tracking-wide border border-[#39FF14]/30 hover:border-[#39FF14] hover:bg-[#39FF14]/10 hover:text-[#39FF14] transition-all duration-300 cursor-pointer justify-center backdrop-blur-md gap-2',
+              )}
+            >
+              <FileText className="w-4 h-4 text-[#39FF14]" />
+              Resume (PDF)
+            </a>
 
             <Link
               href="#contact"
@@ -356,7 +372,7 @@ export function Hero() {
               <div className="flex items-center gap-2 sm:gap-3">
                 <span className="flex items-center gap-1.5 text-[#39FF14] font-semibold">
                   <ShieldCheck className="w-3.5 h-3.5" />
-                  CI/CD: 7/7 Passing Tests (100% Contract)
+                  CI/CD: 10/10 Passing Tests (100% Contract)
                 </span>
                 <span className="hidden sm:inline text-border">|</span>
                 <span className="hidden sm:inline">TypeScript 5.8</span>
